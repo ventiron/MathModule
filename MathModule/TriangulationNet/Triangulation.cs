@@ -26,16 +26,6 @@ namespace MathModule
         /// <переменные>
         /// loopCount - переменная - счётчик для нахождения залупливания циклов (на момент написания - цикла поиска треугольника).
         /// precision - переменная используемая для установки границы округления.
-        /// currentPlanarMod - переменная для установки размера по массива планарного разбиения по 1 оси (на момент написания не используется).
-        /// planarMod - коэффициент расширения массива планарного разбиения (на момент написания не используется).
-        /// planarBorder - число треугольников, при достижении которого массив планарного разбиения расширяется в 4 раза (2 раза по каждой оси) (на момент написания не используется).
-        /// section - расстояние между соседними точками в планарном разбиении (на момент написания не используется).
-        /// minX - минимальное значение X среди всех точек триангуляции (на момент написания не используется).
-        /// minY - минимальное значение Y среди всех точек триангуляции (на момент написания не используется).
-        /// minZ - минимальное значение Z среди всех точек триангуляции (на момент написания не используется).
-        /// maxX - максимальное значение X среди всех точек триангуляции (на момент написания не используется).
-        /// maxY - максимальное значение Y среди всех точек триангуляции (на момент написания не используется).
-        /// maxZ - максимальное значение Z среди всех точек триангуляции (на момент написания не используется).
         /// </переменные>
         TriangulationSearchMassive searchArray;
         int loopCount;
@@ -114,59 +104,7 @@ namespace MathModule
             outerEdges.Add(edges[1]);
             outerEdges.Add(edges[2]);
             triangles.Add(new Triangle(edges[0], edges[1], edges[2]));
-            //minX = points[0].X;
-            //minY = points[0].Y;
-            //maxX = points[0].X;
-            //maxY = points[0].Y;
-            //minZ = points[0].Z;
-            //maxZ = points[0].Z;
-            //foreach (Point p in points)
-            //{
-            //    if (p.X > maxX)
-            //    {
-            //        maxX = p.X;
-            //    }
-            //    if (p.X < minX)
-            //    {
-            //        minX = p.X;
-            //    }
-            //    if (p.Y > maxY)
-            //    {
-            //        maxY = p.Y;
-            //    }
-            //    if (p.Y < minY)
-            //    {
-            //        minY = p.Y;
-            //    }
-            //    if (p.Z > maxZ)
-            //    {
-            //        maxZ = p.Z;
-            //    }
-            //    if (p.Z < minZ)
-            //    {
-            //        minZ = p.Z;
-            //    }
-            //}
-            //double tempMaxX = maxX;
-            //double tempMinX = minX;
-            //double tempMaxY = maxY;
-            //double tempMinY = minY;
-            //if ((maxX - minX) < (maxY - minY))
-            //{
-            //    double delta = (maxY - minY) - (maxX - minX);
-            //    maxX += delta / 2d;
-            //    minX -= delta / 2d;
-            //}
-            //else
-            //{
-            //    double delta = (maxX - minX) - (maxY - minY);
-            //    maxY += delta / 2d;
-            //    minY -= delta / 2d;
-            //}
-            //section = (maxX + 1) - (minX - 1);
-            //planar = new LinkCell[1, 1];
-            //planar[0, 0] = new LinkCell(minX - 1, minY - 1, maxX + 1, maxY + 1, triangles[0]);
-            //UpgradePlanarRectangles();
+
 
             searchArray = new TriangulationSearchMassive(this);
             try
@@ -1442,24 +1380,6 @@ namespace MathModule
 
 
 
-
-        //private void UpgradePlanarRectangles()
-        //{
-        //    LinkCell[,] planarTemp = new LinkCell[currentPlanarMod * 2, currentPlanarMod * 2];
-        //    for (int i = 0; i < currentPlanarMod; i++)
-        //    {
-        //        for (int j = 0; j < currentPlanarMod; j++)
-        //        {
-        //            planarTemp[i * 2, j * 2] = new LinkCell(planar[i, j].MinX, planar[i, j].MaxY / 2d, planar[i, j].MaxX / 2d, planar[i, j].MaxY, planar[i, j].GetTriangle());
-        //            planarTemp[i * 2 + 1, j * 2] = new LinkCell(planar[i, j].MinX, planar[i, j].MinY, planar[i, j].MaxX / 2d, planar[i, j].MaxY / 2d, planar[i, j].GetTriangle());
-        //            planarTemp[i * 2, j * 2 + 1] = new LinkCell(planar[i, j].MaxX / 2d, planar[i, j].MaxY / 2d, planar[i, j].MaxX, planar[i, j].MaxY, planar[i, j].GetTriangle());
-        //            planarTemp[i * 2 + 1, j * 2 + 1] = new LinkCell(planar[i, j].MaxX / 2d, planar[i, j].MinY, planar[i, j].MaxX, planar[i, j].MaxY / 2d, planar[i, j].GetTriangle());
-        //        }
-        //    }
-        //    section /= 2d;
-        //    currentPlanarMod *= 2;
-        //    planar = planarTemp;
-        //}
 
         public Point GetPointById(string id)
         {
