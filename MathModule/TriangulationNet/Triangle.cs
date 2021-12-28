@@ -434,5 +434,16 @@ namespace MathModule
 
             return (b1 && b2 && b3);
         }
+
+
+        public Point GetPointBelongingToSegment(Segment seg)
+        {
+            Point[] points = this.GetPoints();
+            foreach(Point point in points)
+            {
+                if (seg.isPointBelongToSegment(point)) return point;
+            }
+            return null;
+        }
     }
 }

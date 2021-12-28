@@ -8,7 +8,7 @@ namespace MathModule
 {
     public class BMF
     {
-        public static double epsilon = 1E-12;
+        public static double epsilon = 1E-7;
 
         public static bool Deq(double d1, double d2)
         {

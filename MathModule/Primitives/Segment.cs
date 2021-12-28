@@ -509,9 +509,9 @@ namespace MathModule
 
         public bool isPointBelongToSegment(Point point)
         {
-            return !(point.X < Math.Min(this.points[0].X, this.points[1].X) || point.Y < Math.Min(this.points[0].Y, this.points[1].Y) || point.X > Math.Max(this.points[0].X, this.points[1].X) || point.Y > Math.Max(this.points[0].Y, this.points[1].Y))
-                && IsCollinear(point);
-            //return BMF.Deq(this.GetLengthTo2D(point), 0d);
+            //return !(point.X < Math.Min(this.points[0].X, this.points[1].X) || point.Y < Math.Min(this.points[0].Y, this.points[1].Y) || point.X > Math.Max(this.points[0].X, this.points[1].X) || point.Y > Math.Max(this.points[0].Y, this.points[1].Y))
+            //    && IsCollinear(point);
+            return BMF.Deq(this.GetLengthTo2D(point), 0d);
         }
 
         /// <summary>

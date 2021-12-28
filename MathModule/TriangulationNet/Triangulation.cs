@@ -112,11 +112,11 @@ namespace MathModule
                 for (int i = 3; i < points.Count; i++)
                 {
                     AddPoint(points[i]);
-                    //if (this.GetStatus() == 1)
-                    //{
-                    //    i--;
-                    //    this.SetStatus(0);
-                    //}
+                    if (this.GetStatus() == 1)
+                    {
+                        //i--;
+                        //this.SetStatus(0);
+                    }
                 }
             }
             catch (Exception e)
@@ -134,13 +134,6 @@ namespace MathModule
         /// <param name="point"> Точка, которая добавляется в триангуляцию. </param>
         public void AddPoint(Point point, bool isDeloneNeeded = true)
         {
-            //if (triangles.Count() + 3 >= planarBorder)
-            //{
-            //    UpgradePlanarRectangles();
-            //    planarBorder = ((planar.Length - 1) ^ 2) * planarMod;
-            //}
-
-
             // находим треугольник ближайший к добавляемой точке.
             Triangle tr = FindTriangle(point);
             if (tr == null)
@@ -733,15 +726,17 @@ namespace MathModule
                     {
                         return tr;
                     }
-                    Point pt = edge.GetIntersection2D(Center, point);
-                    if (pt == null || edge == currentEdge)
+                    TriangulationEdge interEdge = new TriangulationEdge(Center, point);
+                    Point pt = edge.GetIntersection2D(interEdge);
+                    Point pInter = tr.GetPointBelongingToSegment(interEdge);
+                    if ((pt == null || edge == currentEdge) && pInter == null)
                     {
                         count++;
                         continue;
                     }
-                    if (tr.IsPointIntersect2D(pt))
+                    if (pInter != null)
                     {
-                        TriangulationEdge[] testEdges = tr.GetEdgesByPoint(tr.PointIntersect2D(pt));
+                        TriangulationEdge[] testEdges = tr.GetEdgesByPoint(tr.PointIntersect2D(pInter));
                         if (testEdges[0].isBorderEdge() && testEdges[1].isBorderEdge())
                         {
                             return null;
