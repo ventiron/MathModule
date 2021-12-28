@@ -40,16 +40,7 @@ namespace MathModule
         TriangulationSearchMassive searchArray;
         int loopCount;
         int precision;
-        //int currentPlanarMod;
-        //int planarMod;
-        //long planarBorder;
-        //double section;
-        //double minX;
-        //double minY;
-        //double minZ;
-        //double maxX;
-        //double maxY;
-        //double maxZ;
+
 
 
         /// <Переменные - массивы>
