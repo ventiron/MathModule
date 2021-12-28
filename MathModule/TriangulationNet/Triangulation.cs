@@ -998,10 +998,10 @@ namespace MathModule
                 MessageBox.Show($"Ошибка при переброске ребра{tr1}\n\n{tr2}");
             }
             Point center = new TriangulationEdge(p1, p2).GetMiddlePoint();
-            //if (!tr1.IsInside(center) || !tr2.IsInside(center))
-            //{
-            //    return;
-            //}
+            if (!tr1.IsInside(center) && !tr2.IsInside(center))
+            {
+                return;
+            }
             TriangulationEdge tempEdge1Tr1 = tr1.GetEdgeByPoints(commonEdge.points[0], p1);
             TriangulationEdge tempEdge2Tr1 = tr1.GetEdgeByPoints(commonEdge.points[1], p1);
             TriangulationEdge tempEdge1Tr2 = tr2.GetEdgeByPoints(commonEdge.points[0], p2);

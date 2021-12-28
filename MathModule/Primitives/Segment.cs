@@ -539,7 +539,7 @@ namespace MathModule
         /// <returns></returns>
         public Point GetMiddlePoint()
         {
-            return new Point(points[0].X + (points[1].X - points[0].X) / 2, points[0].Y + (points[1].Y - points[0].Y) / 2, points[0].Z + (points[1].Z - points[0].Z) / 2);
+            return new Point((points[0].X + points[1].X) / 2, (points[0].Y + points[1].Y) / 2, (points[0].Z + points[1].Z)/ 2);
         }
 
         public static Segment GetLineOnY2D(double x, double dist = double.MaxValue - 1E200)
