@@ -95,6 +95,7 @@ namespace MathModule
         {
             if (points[0] == point || points[1] == point) return true;
             return false;
+
         }
 
 
