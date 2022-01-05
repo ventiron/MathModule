@@ -32,7 +32,6 @@ namespace MathModule
         int precision;
 
 
-
         /// <Переменные - массивы>
         /// GetPoints() - массив всех точек триангуляции, в ходе работы НИКАК не меняется и НЕ БУДЕТ ИНАЧЕ ВСЁ СЛОМАЕТСЯ.
         /// edges - массив всех рёбер (граней) триангуляции.
@@ -1143,7 +1142,7 @@ namespace MathModule
                         continue;
                     }
                     CreateBorderIsoline(currentHeight);
-                    //CreateInnerIsoline(currentHeight);
+                    CreateInnerIsoline(currentHeight);
                     absoluteHeight += step;
                     currentHeight = absoluteHeight;
                 }
@@ -1217,14 +1216,14 @@ namespace MathModule
                                     if (trEdge.isBorderEdge())
                                     {
                                         isLastPointFound = true;
-                                        break;
                                     }
+                                    break;
                                 }
                             }
-                            //if (isLastPointFound)
-                            //{
-                            //    break;
-                            //}
+                            if (isLastPointFound)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
@@ -1294,13 +1293,18 @@ namespace MathModule
                     if (IsHeightInEdge(edge, height))
                     {
                         tr.SetStatus(1);
+                        break;
                     }
                 }
             }
         }
         private bool IsHeightInEdge(TriangulationEdge edge, double height)
         {
-            return !((edge.points[0].Z <= height && height <= edge.points[1].Z) || (edge.points[0].Z >= height && height >= edge.points[1].Z));
+            if ((edge.points[0].Z <= height && height <= edge.points[1].Z) || (edge.points[0].Z >= height && height >= edge.points[1].Z))
+            {
+                return true;
+            }
+            return false;
         }
         private void SetAllTrianglesStatus(short status)
         {

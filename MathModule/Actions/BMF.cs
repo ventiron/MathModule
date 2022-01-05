@@ -378,7 +378,7 @@ namespace MathModule
                 {
                     yMin = point.Y;
                 }
-                if (point.Z < xMin)
+                if (point.Z < zMin)
                 {
                     zMin = point.Z;
                 }
