@@ -15,7 +15,7 @@ namespace MathModule
         /// </summary>
         public List<Point> points;
         int precision = 9;
-        decimal A, B, C;//коэффициенты уравнения прямой вида: Ax+By+C=0
+        double A, B, C;//коэффициенты уравнения прямой вида: Ax+By+C=0
         public Segment(Point p1, Point p2, string id = "0")
         {
             if(p1 == p2)
@@ -51,9 +51,9 @@ namespace MathModule
         /// Возвращяет длину отрезка через формулу пифагора
         /// </summary>
         /// <returns></returns>
-        public decimal GetLength()
+        public double GetLength()
         {
-            return Convert.ToDecimal(Math.Sqrt(Math.Pow(Convert.ToDouble(points[0].X - points[1].X), 2) + Math.Pow(Convert.ToDouble(points[0].Y - points[1].Y),2)));
+            return Math.Sqrt(Math.Pow(points[0].X - points[1].X, 2) + Math.Pow(points[0].Y - points[1].Y,2));
         }
 
 
@@ -62,26 +62,26 @@ namespace MathModule
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public decimal GetLengthTo2D(Point p)
+        public double GetLengthTo2D(Point p)
         {
             Vector2D P1P2 = new Vector2D(this);
             Vector2D P1P = new Vector2D(this.points[0], p);
             Vector2D P2P = new Vector2D(this.points[1], p);
 
-            decimal p1 = P1P.ScalarMultOrtho(P1P2);
-            decimal p2 = P2P.ScalarMultOrtho(P1P2);
+            double p1 = P1P.ScalarMultOrtho(P1P2);
+            double p2 = P2P.ScalarMultOrtho(P1P2);
 
             if(p1 < 0)
             {
-                return Convert.ToDecimal(Math.Sqrt(Math.Pow(Convert.ToDouble(P1P.X), 2) + Math.Pow(Convert.ToDouble(P1P.Y), 2)));
+                return Math.Sqrt(Math.Pow(P1P.X, 2) + Math.Pow(P1P.Y, 2));
             }
             else if(p2 > 0)
             {
-                return Convert.ToDecimal(Math.Sqrt(Math.Pow(Convert.ToDouble(P2P.X), 2) + Math.Pow(Convert.ToDouble(P2P.Y), 2)));
+                return Math.Sqrt(Math.Pow(P2P.X, 2) + Math.Pow(P2P.Y, 2));
             }
             else
             {
-                decimal mod = Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(P1P2.ScalarMultOrtho(P1P2))));
+                double mod = Math.Sqrt(P1P2.ScalarMultOrtho(P1P2));
                 return Math.Abs(P1P2.X * P1P.Y - P1P2.Y * P1P.X) / mod;
             }
         }
@@ -112,12 +112,12 @@ namespace MathModule
             //Point p2 = pt2;
             //Point p3 = this.points[0];
             //Point p4 = this.points[1];
-            //decimal A1;
-            //decimal A2;
-            //decimal b1;
-            //decimal b2;
-            //decimal Xa;
-            //decimal Ya;
+            //double A1;
+            //double A2;
+            //double b1;
+            //double b2;
+            //double Xa;
+            //double Ya;
             //// Переброска точек, чтобы первые были минимальны
             //if (p1.X > p2.X)
             //{
@@ -182,7 +182,7 @@ namespace MathModule
             //// Проверка на параллельность
             //if (BMF.Deq(A1, A2))
             //{
-            //    decimal A3 = (p1.Y - p3.Y) / (p1.X - p3.X);
+            //    double A3 = (p1.Y - p3.Y) / (p1.X - p3.X);
             //    if (BMF.Deq(A1, A3))
             //    {
             //        return new Point(p3.X, p3.Y, p3.Z);
@@ -211,11 +211,11 @@ namespace MathModule
 
 
             Segment seg = new Segment(pt1, pt2);
-            decimal dist1 = this.GetLengthTo2D(pt1);
-            decimal dist2 = this.GetLengthTo2D(pt2);
-            decimal dist3 = seg.GetLengthTo2D(this.points[0]);
-            decimal dist4 = seg.GetLengthTo2D(this.points[1]);
-            decimal dist = Math.Min(Math.Min(dist1, dist2), Math.Min(dist3, dist4));
+            double dist1 = this.GetLengthTo2D(pt1);
+            double dist2 = this.GetLengthTo2D(pt2);
+            double dist3 = seg.GetLengthTo2D(this.points[0]);
+            double dist4 = seg.GetLengthTo2D(this.points[1]);
+            double dist = Math.Min(Math.Min(dist1, dist2), Math.Min(dist3, dist4));
             if (dist < BMF.epsilon)
             {
                 if (BMF.Deq(dist1, dist))
@@ -244,12 +244,12 @@ namespace MathModule
             Point p2 = pt2;
             Point p3 = this.points[0];
             Point p4 = this.points[1];
-            decimal A1;
-            decimal A2;
-            decimal b1;
-            decimal b2;
-            decimal Xa;
-            decimal Ya;
+            double A1;
+            double A2;
+            double b1;
+            double b2;
+            double Xa;
+            double Ya;
 
 
             // Переброска точек, чтобы первые были минимальны
@@ -316,7 +316,7 @@ namespace MathModule
             // Проверка на параллельность
             if (BMF.Deq(A1, A2))
             {
-                decimal A3 = (p1.Y - p3.Y) / (p1.X - p3.X);
+                double A3 = (p1.Y - p3.Y) / (p1.X - p3.X);
                 if (BMF.Deq(A1, A3))
                 {
                     return new Point(p3.X, p3.Y, p3.Z);
@@ -356,11 +356,11 @@ namespace MathModule
             Vector2D vec2D1 = new Vector2D(this);
             Vector2D vec2D2 = new Vector2D(this.points[0], point);
 
-            decimal mult = vec2D1.ScalarMultOrtho(vec2D2);
+            double mult = vec2D1.ScalarMultOrtho(vec2D2);
 
-            decimal selfMult = vec2D1.ScalarMultOrtho(vec2D1);
+            double selfMult = vec2D1.ScalarMultOrtho(vec2D1);
 
-            decimal factor = mult / selfMult;
+            double factor = mult / selfMult;
             Point result = new Point(this.points[0].X + vec2D1.X * factor, this.points[0].Y + vec2D1.Y * factor, 0);
             if (limited)
             {
@@ -396,14 +396,14 @@ namespace MathModule
             Vector3D v13 = new Vector3D(p1, p3);
             Vector3D v43 = new Vector3D(p4, p3);
 
-            decimal d1343 = v13.ScalarMultOrtho(v43);
-            decimal d4321 = v43.ScalarMultOrtho(v21);
-            decimal d1321 = v13.ScalarMultOrtho(v21);
-            decimal d4343 = v43.ScalarMultOrtho(v43);
-            decimal d2121 = v21.ScalarMultOrtho(v21);
+            double d1343 = v13.ScalarMultOrtho(v43);
+            double d4321 = v43.ScalarMultOrtho(v21);
+            double d1321 = v13.ScalarMultOrtho(v21);
+            double d4343 = v43.ScalarMultOrtho(v43);
+            double d2121 = v21.ScalarMultOrtho(v21);
 
-            decimal modA = (d1343 * d4321 - d1321 * d4343) / (d2121 * d4343 - d4321 * d4321);
-            decimal modB = (d1343 + modA * d4321) / d4343;
+            double modA = (d1343 * d4321 - d1321 * d4343) / (d2121 * d4343 - d4321 * d4321);
+            double modB = (d1343 + modA * d4321) / d4343;
 
 
             if (firstLine)
@@ -438,14 +438,14 @@ namespace MathModule
             Vector3D v13 = new Vector3D(p1, p3);
             Vector3D v43 = new Vector3D(p4, p3);
 
-            decimal d1343 = v13.ScalarMultOrtho(v43);
-            decimal d4321 = v43.ScalarMultOrtho(v21);
-            decimal d1321 = v13.ScalarMultOrtho(v21);
-            decimal d4343 = v43.ScalarMultOrtho(v43);
-            decimal d2121 = v21.ScalarMultOrtho(v21);
+            double d1343 = v13.ScalarMultOrtho(v43);
+            double d4321 = v43.ScalarMultOrtho(v21);
+            double d1321 = v13.ScalarMultOrtho(v21);
+            double d4343 = v43.ScalarMultOrtho(v43);
+            double d2121 = v21.ScalarMultOrtho(v21);
 
-            decimal modA = (d1343 * d4321 - d1321 * d4343) / (d2121 * d4343 - d4321 * d4321);
-            decimal modB = (d1343 + modA * d4321) / d4343;
+            double modA = (d1343 * d4321 - d1321 * d4343) / (d2121 * d4343 - d4321 * d4321);
+            double modB = (d1343 + modA * d4321) / d4343;
 
 
             if (firstLine)
@@ -494,7 +494,7 @@ namespace MathModule
         /// </summary>
         /// <param name="height"></param>
         /// <returns></returns>
-        public bool IsPointsHeightEqual(decimal height)
+        public bool IsPointsHeightEqual(double height)
         {
             if (BMF.Deq(this.points[0].Z, height) && BMF.Deq(this.points[1].Z, height))
             {
@@ -512,7 +512,7 @@ namespace MathModule
         {
             //return !(point.X < Math.Min(this.points[0].X, this.points[1].X) || point.Y < Math.Min(this.points[0].Y, this.points[1].Y) || point.X > Math.Max(this.points[0].X, this.points[1].X) || point.Y > Math.Max(this.points[0].Y, this.points[1].Y))
             //    && IsCollinear(point);
-            return BMF.Deq(this.GetLengthTo2D(point), 0m);
+            return BMF.Deq(this.GetLengthTo2D(point), 0d);
         }
 
         /// <summary>
@@ -537,26 +537,26 @@ namespace MathModule
         /// Возвращает середину отрезка.
         /// </summary>
         /// <returns></returns>
-        //public Point GetMiddlePoint()
-        //{
-        //    return new Point((points[0].X + points[1].X) / 2, (points[0].Y + points[1].Y) / 2, (points[0].Z + points[1].Z)/ 2);
-        //}
+        public Point GetMiddlePoint()
+        {
+            return new Point((points[0].X + points[1].X) / 2, (points[0].Y + points[1].Y) / 2, (points[0].Z + points[1].Z)/ 2);
+        }
 
-        //public static Segment GetLineOnY2D(decimal x, decimal dist = decimal.MaxValue)
-        //{
-        //    return new Segment(new Point(x, dist, 0), new Point(x, -dist, 0));
-        //}
-        //public static Segment GetLineOnX2D(decimal y, decimal dist = decimal.MaxValue)
-        //{
-        //    return new Segment(new Point(dist, y, 0), new Point(-dist, y, 0));
-        //}
-        //public static Segment GetLineByAngle2D(decimal x, decimal y, decimal ang, decimal dist = decimal.MaxValue, bool mirror = false)
-        //{
-        //    if (!mirror)
-        //        return new Segment(new Point(x + dist * Math.Cos(ang), y + dist * Math.Sin(ang), 0), new Point(x - dist * Math.Cos(ang), y - dist * Math.Sin(ang), 0));
-        //    else
-        //        return new Segment(new Point(x + dist * Math.Cos(ang), y - dist * Math.Sin(ang), 0), new Point(x - dist * Math.Cos(ang), y + dist * Math.Sin(ang), 0));
-        //}
+        public static Segment GetLineOnY2D(double x, double dist = double.MaxValue - 1E200)
+        {
+            return new Segment(new Point(x, dist, 0), new Point(x, -dist, 0));
+        }
+        public static Segment GetLineOnX2D(double y, double dist = double.MaxValue - 1E200)
+        {
+            return new Segment(new Point(dist, y, 0), new Point(-dist, y, 0));
+        }
+        public static Segment GetLineByAngle2D(double x, double y, double ang, double dist = double.MaxValue - 1E200, bool mirror = false)
+        {
+            if (!mirror)
+                return new Segment(new Point(x + dist * Math.Cos(ang), y + dist * Math.Sin(ang), 0), new Point(x - dist * Math.Cos(ang), y - dist * Math.Sin(ang), 0));
+            else
+                return new Segment(new Point(x + dist * Math.Cos(ang), y - dist * Math.Sin(ang), 0), new Point(x - dist * Math.Cos(ang), y + dist * Math.Sin(ang), 0));
+        }
 
 
 

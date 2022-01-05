@@ -63,9 +63,9 @@ namespace MathModule
 
 
 
-        public decimal[] GetVector()
+        public double[] GetVector()
         {
-            return new decimal[3] { this.points[0].X - this.points[1].X,     this.points[0].Y - this.points[1].Y,     this.points[0].Z - this.points[1].Z};
+            return new double[3] { this.points[0].X - this.points[1].X,     this.points[0].Y - this.points[1].Y,     this.points[0].Z - this.points[1].Z};
         }
     }
 }

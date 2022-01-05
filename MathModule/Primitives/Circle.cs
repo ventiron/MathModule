@@ -8,10 +8,10 @@ namespace MathModule
 {
     public class Circle : MathObject
     {
-        public decimal radius;
+        public double radius;
         public Point center;
 
-        public Circle(Point center, decimal radius)
+        public Circle(Point center, double radius)
         {
             this.radius = radius;
             this.center = center;
@@ -21,20 +21,20 @@ namespace MathModule
         {
             Point[] result = new Point[2];
             Vector2D segV = new Vector2D(seg);
-            decimal segVK = segV.ScalarMultOrtho(segV);
+            double segVK = segV.ScalarMultOrtho(segV);
 
-            decimal k1 = 2 * (segV.X * (seg.points[0].X - center.X) + segV.Y * (seg.points[0].Y - center.Y));
+            double k1 = 2 * (segV.X * (seg.points[0].X - center.X) + segV.Y * (seg.points[0].Y - center.Y));
             Vector2D tempVect = new Vector2D(center, seg.points[0]);
-            decimal k2 = tempVect.ScalarMultOrtho(tempVect) - (radius * radius);
+            double k2 = tempVect.ScalarMultOrtho(tempVect) - (radius * radius);
 
-            decimal det = k1 * k1 - 4m * segVK * k2;
-            if (segVK <= 1E-12m || det < 0)
+            double det = k1 * k1 - 4 * segVK * k2;
+            if (segVK <= 1E-12 || det < 0)
             {
                 return null;
             }
             else if (BMF.Deq(det, 0))
             {
-                decimal mod = -k1 / (segVK * 2);
+                double mod = -k1 / (segVK * 2);
                 Point newPoint = new Point(seg.points[0].X + segV.X * mod, seg.points[0].Y + segV.Y * mod, 0);
                 if (seg.isPointBelongToSegment(newPoint))
                 {
@@ -43,13 +43,13 @@ namespace MathModule
             }
             else
             {
-                decimal mod = (-k1 + Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(det)))) / (segVK * 2);
+                double mod = (-k1 + Math.Sqrt(det)) / (segVK * 2);
                 Point newPoint = new Point(seg.points[0].X + segV.X * mod, seg.points[0].Y + segV.Y * mod, 0);
                 if (seg.isPointBelongToSegment(newPoint))
                 {
                     result[0] = new Point(seg.points[0].X + segV.X * mod, seg.points[0].Y + segV.Y * mod, 0);
                 }
-                mod = (-k1 - Convert.ToDecimal(Math.Sqrt(Convert.ToDouble(det)))) / (segVK * 2);
+                mod = (-k1 - Math.Sqrt(det)) / (segVK * 2);
                 newPoint = new Point(seg.points[0].X + segV.X * mod, seg.points[0].Y + segV.Y * mod, 0);
                 if (seg.isPointBelongToSegment(newPoint))
                 {
@@ -76,9 +76,9 @@ namespace MathModule
             return result;
         }
 
-        public decimal GetArea()
+        public double GetArea()
         {
-            return Convert.ToDecimal(Math.PI) * 2m * radius;
+            return Math.PI * 2 * radius;
         }
     }
 }

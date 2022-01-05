@@ -8,10 +8,10 @@ namespace MathModule
 {
     public class Vector2D : MathObject
     {
-        public decimal X;
-        public decimal Y;
+        public double X;
+        public double Y;
 
-        public Vector2D(decimal X, decimal Y)
+        public Vector2D(double X, double Y)
         {
             this.X = X;
             this.Y = Y;
@@ -51,15 +51,15 @@ namespace MathModule
         {
             return new Vector2D(this.X + vector.X, this.Y + vector.Y);
         }
-        public decimal ScalarMultOrtho(Vector2D vector)
+        public double ScalarMultOrtho(Vector2D vector)
         {
             return this.X * vector.X + this.Y * vector.Y;
         }
-        public decimal ScalarMult(Vector2D vector)
+        public double ScalarMult(Vector2D vector)
         {
-            return 0m;
+            return 0d;
         }
-        public decimal Length()
+        public double Length()
         {
             return Math.Sqrt(Math.Pow(this.X, 2) + Math.Pow(this.Y, 2));
         }

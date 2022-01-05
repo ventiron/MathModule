@@ -8,11 +8,11 @@ namespace MathModule
 {
     public class Vector3D : MathObject
     {
-        public decimal X;
-        public decimal Y;
-        public decimal Z;
+        public double X;
+        public double Y;
+        public double Z;
 
-        public Vector3D(decimal X, decimal Y, decimal Z)
+        public Vector3D(double X, double Y, double Z)
         {
             this.X = X;
             this.Y = Y;
@@ -57,24 +57,24 @@ namespace MathModule
         {
             return new Vector3D(this.X + vector.X, this.Y + vector.Y, this.Z + vector.Z);
         }
-        public decimal ScalarMultOrtho(Vector3D vector)
+        public double ScalarMultOrtho(Vector3D vector)
         {
             return this.X * vector.X + this.Y * vector.Y + this.Z * vector.Z;
         }
-        public decimal ScalarMult(Vector2D vector)
+        public double ScalarMult(Vector2D vector)
         {
-            return 0m;
+            return 0d;
         }
         public Vector3D VectorMult(Vector3D vector)
         {
-            decimal[] factors = MxF.GetFactors(new decimal[3, 3] { { 1, 1, 1 }, { this.X, this.Y, this.Z }, { vector.X, vector.Y, vector.Z } });
+            double[] factors = MxF.GetFactors(new double[3, 3] { { 1, 1, 1 }, { this.X, this.Y, this.Z }, { vector.X, vector.Y, vector.Z } });
             return new Vector3D(factors[0], factors[1], factors[2]);
         }
-        public decimal Length()
+        public double Length()
         {
             return Math.Sqrt(Math.Pow(this.X, 2) + Math.Pow(this.Y, 2) + Math.Pow(this.Z, 2));
         }
-        public decimal PowLength()
+        public double PowLength()
         {
             return Math.Pow(this.X, 2) + Math.Pow(this.Y, 2) + Math.Pow(this.Z, 2);
         }

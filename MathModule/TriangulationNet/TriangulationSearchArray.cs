@@ -13,7 +13,7 @@ namespace MathModule
         private int planarMod;
         long planarBorder;
         int count;
-        private  decimal section;
+        private  double section;
         Triangulation triangulation;
 
         private Point min;
@@ -35,10 +35,10 @@ namespace MathModule
             this.max = max;
 
 
-            decimal dX = max.X - min.X;
-            decimal dY = max.Y - min.Y;
+            double dX = max.X - min.X;
+            double dY = max.Y - min.Y;
 
-            decimal dd = dX - dY;
+            double dd = dX - dY;
 
             if (dd>0)
             {
@@ -82,14 +82,14 @@ namespace MathModule
 
                 if(min.X > tMin.X)
                 {
-                    decimal del = min.X - tMin.X;
+                    double del = min.X - tMin.X;
                     min.X -= del;
                     min.Y -= del;
                     section = max.X - min.X;
                 }
                 if (min.Y > tMin.Y)
                 {
-                    decimal del = min.Y - tMin.Y;
+                    double del = min.Y - tMin.Y;
                     min.X -= del;
                     min.Y -= del;
                     section = max.X - min.X;
@@ -100,21 +100,21 @@ namespace MathModule
                 }
                 if (max.X < tMax.X)
                 {
-                    decimal del = max.X - tMax.X;
+                    double del = max.X - tMax.X;
                     max.X -= del;
                     max.Y -= del;
                     section = max.X - min.X;
                 }
                 if (max.Y < tMax.Y)
                 {
-                    decimal del = max.Y - tMax.Y;
+                    double del = max.Y - tMax.Y;
                     max.X -= del;
                     max.Y -= del;
                     section = max.X - min.X;
                 }
                 if (max.Z < tMax.Z)
                 {
-                    decimal del = max.Z + tMax.Z;
+                    double del = max.Z + tMax.Z;
                     min.Z = min.Z - (max.Z - tMin.Z);
                 }
             }
@@ -168,13 +168,13 @@ namespace MathModule
                     linkCellsTemp[i * 2 + 1, j * 2 + 1] = linkCells[i, j];
                 }
             }
-            section /= 2m;
+            section /= 2d;
             linkCells = linkCellsTemp;
         }
 
 
 
-        public decimal GetSection()
+        public double GetSection()
         {
             return section;
         }
