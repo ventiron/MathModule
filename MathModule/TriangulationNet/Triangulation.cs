@@ -113,8 +113,8 @@ namespace MathModule
                     AddPoint(points[i]);
                     if (this.GetStatus() == 1)
                     {
-                        //i--;
-                        //this.SetStatus(0);
+                        i--;
+                        this.SetStatus(0);
                     }
                 }
             }
@@ -147,8 +147,8 @@ namespace MathModule
             // займёт слишком много времени.
             if (tr.IsPointIntersect2D(point))
             {
-                //points.Remove(point);
-                //this.SetStatus(1);
+                points.Remove(point);
+                this.SetStatus(1);
                 ++PointCount;
                 return;
             }
@@ -683,7 +683,7 @@ namespace MathModule
         /// </summary>
         /// <param name="point"> Искомая точка. </param>
         /// <returns></returns>
-        public Triangle FindTriangle(Point point)
+        public Triangle FindTriangle(Point point, bool absoluteCheck = true)
         {
             Random rand = new Random();
             //Triangle tr = triangles[rand.Next(triangles.Count - 1)];
@@ -728,6 +728,20 @@ namespace MathModule
                     TriangulationEdge interEdge = new TriangulationEdge(Center, point);
                     Point pt = edge.GetIntersection2D(interEdge);
                     Point pInter = tr.GetPointBelongingToSegment(interEdge);
+                    if(pt == null && absoluteCheck)
+                    {
+                        Point min = BMF.GetMin(new List<Point>(tr.GetPoints()));
+                        Point max = BMF.GetMax(new List<Point> (tr.GetPoints()));
+                        Center.X = Center.X + (max.X - min.X) / 10000;
+                        pt = edge.GetIntersection2D(interEdge);
+                        pInter = tr.GetPointBelongingToSegment(interEdge);
+                        if(pt == null)
+                        {
+                            Center.Y = Center.Y + (max.Y - min.Y) / 10000;
+                            pt = edge.GetIntersection2D(interEdge);
+                            pInter = tr.GetPointBelongingToSegment(interEdge);
+                        }
+                    }
                     if ((pt == null || edge == currentEdge) && pInter == null)
                     {
                         count++;
@@ -1142,7 +1156,7 @@ namespace MathModule
                         continue;
                     }
                     CreateBorderIsoline(currentHeight);
-                    CreateInnerIsoline(currentHeight);
+                    //CreateInnerIsoline(currentHeight);
                     absoluteHeight += step;
                     currentHeight = absoluteHeight;
                 }
