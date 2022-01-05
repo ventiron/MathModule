@@ -1143,7 +1143,7 @@ namespace MathModule
                         continue;
                     }
                     CreateBorderIsoline(currentHeight);
-                    CreateInnerIsoline(currentHeight);
+                    //CreateInnerIsoline(currentHeight);
                     absoluteHeight += step;
                     currentHeight = absoluteHeight;
                 }
@@ -1217,14 +1217,14 @@ namespace MathModule
                                     if (trEdge.isBorderEdge())
                                     {
                                         isLastPointFound = true;
+                                        break;
                                     }
-                                    break;
                                 }
                             }
-                            if (isLastPointFound)
-                            {
-                                break;
-                            }
+                            //if (isLastPointFound)
+                            //{
+                            //    break;
+                            //}
                         }
                     }
                 }
@@ -1300,11 +1300,7 @@ namespace MathModule
         }
         private bool IsHeightInEdge(TriangulationEdge edge, double height)
         {
-            if ((edge.points[0].Z <= height && height <= edge.points[1].Z) || (edge.points[0].Z >= height && height >= edge.points[1].Z))
-            {
-                return true;
-            }
-            return false;
+            return !((edge.points[0].Z <= height && height <= edge.points[1].Z) || (edge.points[0].Z >= height && height >= edge.points[1].Z));
         }
         private void SetAllTrianglesStatus(short status)
         {
