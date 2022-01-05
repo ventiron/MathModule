@@ -8,13 +8,13 @@ namespace MathModule
 {
     public class LinkCell
     {
-        public double MinX { get; set; }
-        public double MinY { get; set; }
-        public double MaxX { get; set; }
-        public double MaxY { get; set; }
+        public decimal MinX { get; set; }
+        public decimal MinY { get; set; }
+        public decimal MaxX { get; set; }
+        public decimal MaxY { get; set; }
         Triangle triangle;
 
-        public LinkCell(double minX, double minY, double maxX, double maxY, Triangle triangle)
+        public LinkCell(decimal minX, decimal minY, decimal maxX, decimal maxY, Triangle triangle)
         {
             this.MinX = minX;
             this.MinY = minY;

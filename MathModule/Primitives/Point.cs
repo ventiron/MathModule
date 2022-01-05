@@ -8,11 +8,11 @@ namespace MathModule
 {
     public class Point : MathObject
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
+        public decimal X { get; set; }
+        public decimal Y { get; set; }
+        public decimal Z { get; set; }
 
-        public Point(double X, double Y, double Z, string id = "0")
+        public Point(decimal X, decimal Y, decimal Z, string id = "0")
         {
             this.X = X;
             this.Y = Y;
@@ -37,19 +37,19 @@ namespace MathModule
 
             string[] parts = pointString.Split(' ');
             this.id = parts[0].Trim();
-            this.X = Convert.ToDouble(parts[1].Trim());
-            this.Y = Convert.ToDouble(parts[2].Trim());
-            this.Z = Convert.ToDouble(parts[3].Trim());
+            this.X = Convert.Todecimal(parts[1].Trim());
+            this.Y = Convert.Todecimal(parts[2].Trim());
+            this.Z = Convert.Todecimal(parts[3].Trim());
         }
         public bool IsEqual2D(Point point)
         {
             return (BMF.Deq(point.X, this.X) && BMF.Deq(point.Y, this.Y));
         }
-        public double GetDistance(Point point)
+        public decimal GetDistance(Point point)
         {
             return Math.Sqrt(Math.Pow(this.X - point.X, 2) + Math.Pow(this.Y - point.Y, 2) + Math.Pow(this.Z - point.Z, 2));
         }
-        public double GetDistance2D(Point point)
+        public decimal GetDistance2D(Point point)
         {
             return Math.Sqrt(Math.Pow(this.X - point.X, 2) + Math.Pow(this.Y - point.Y, 2));
         }

@@ -112,12 +112,12 @@ namespace MathModule
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public double GetDistance2DToPoint(Point point)
+        public decimal GetDistance2DToPoint(Point point)
         {
-            double result = edges[0].GetLengthTo2D(point);
+            decimal result = edges[0].GetLengthTo2D(point);
             foreach (Segment segment in edges)
             {
-                double dist = segment.GetLengthTo2D(point);
+                decimal dist = segment.GetLengthTo2D(point);
                 if (dist < result)
                 {
                     result = dist;
@@ -133,11 +133,11 @@ namespace MathModule
         /// <returns></returns>
         public Segment GetClosestSegment(Point point)
         {
-            double count = edges[0].GetLengthTo2D(point);
+            decimal count = edges[0].GetLengthTo2D(point);
             Segment result = null;
             foreach (Segment segment in edges)
             {
-                double dist = segment.GetLengthTo2D(point);
+                decimal dist = segment.GetLengthTo2D(point);
                 if (dist < count)
                 {
                     result = segment;
@@ -151,14 +151,14 @@ namespace MathModule
         /// Возвращает площадь полигона
         /// </summary>
         /// <returns></returns>
-        public double GetArea()
+        public decimal GetArea()
         {
-            double result = 0d;
+            decimal result = 0m;
             for(int i = 0; i < GetPoints().Count - 1; i++)
             {
-                result += MxF.Det(new double[2, 2] { { GetPoints()[i].X, GetPoints()[i].Y }, { GetPoints()[i+1].X, GetPoints()[i+1].Y } });
+                result += MxF.Det(new decimal[2, 2] { { GetPoints()[i].X, GetPoints()[i].Y }, { GetPoints()[i+1].X, GetPoints()[i+1].Y } });
             }
-            result += MxF.Det(new double[2, 2] { { GetPoints()[GetPoints().Count - 1].X, GetPoints()[GetPoints().Count - 1].Y }, { GetPoints()[0].X, GetPoints()[0].Y } });
+            result += MxF.Det(new decimal[2, 2] { { GetPoints()[GetPoints().Count - 1].X, GetPoints()[GetPoints().Count - 1].Y }, { GetPoints()[0].X, GetPoints()[0].Y } });
             return result / 2;
         }
 
@@ -167,9 +167,9 @@ namespace MathModule
         /// Возвращает периметр полигона
         /// </summary>
         /// <returns></returns>
-        public double GetPerimeter()
+        public decimal GetPerimeter()
         {
-            double result = 0;
+            decimal result = 0;
             foreach (Segment edge in edges)
             {
                 result += edge.GetLength();
@@ -185,9 +185,9 @@ namespace MathModule
         public Point GetCenter()
         {
             List<Point> points = this.GetPoints();
-            double X = 0;
-            double Y = 0;
-            double Z = 0;
+            decimal X = 0;
+            decimal Y = 0;
+            decimal Z = 0;
             foreach (Point point in points)
             {
                 X += point.X;
@@ -325,9 +325,9 @@ namespace MathModule
         }
         public Point GetMin()
         {
-            double xMin = double.MaxValue;
-            double yMin = double.MaxValue;
-            double zMin = double.MaxValue;
+            decimal xMin = decimal.MaxValue;
+            decimal yMin = decimal.MaxValue;
+            decimal zMin = decimal.MaxValue;
 
             foreach (Point point in this.GetPoints())
             {
@@ -348,9 +348,9 @@ namespace MathModule
         }
         public Point GetMax()
         {
-            double xMax = double.MinValue;
-            double yMax = double.MinValue;
-            double zMax = double.MinValue;
+            decimal xMax = decimal.MinValue;
+            decimal yMax = decimal.MinValue;
+            decimal zMax = decimal.MinValue;
 
             foreach (Point point in this.GetPoints())
             {

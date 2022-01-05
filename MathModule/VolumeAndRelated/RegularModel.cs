@@ -14,25 +14,25 @@ namespace MathModule
         {
             points = new List<Point>();
         }
-        public RegularModel(Triangulation triangulation, double step)
+        public RegularModel(Triangulation triangulation, decimal step)
         {
             MessageBox.Show("Изменения 2 приняты");
             points = new List<Point>();
             CreateFromTriangulation(triangulation, step);
         }
-        public RegularModel(Triangulation triangulation, Polygon border, double step)
+        public RegularModel(Triangulation triangulation, Polygon border, decimal step)
         {
             points = new List<Point>();
             CreateFromTriangulation(triangulation, border, step);
         }
-        public void CreateFromTriangulation(Triangulation triangulation, double step)
+        public void CreateFromTriangulation(Triangulation triangulation, decimal step)
         {
-            double minX = triangulation.points[0].X;
-            double minY = triangulation.points[0].Y;
-            double maxX = triangulation.points[0].X;
-            double maxY = triangulation.points[0].Y;
-            double minZ = triangulation.points[0].Z;
-            double maxZ = triangulation.points[0].Z;
+            decimal minX = triangulation.points[0].X;
+            decimal minY = triangulation.points[0].Y;
+            decimal maxX = triangulation.points[0].X;
+            decimal maxY = triangulation.points[0].Y;
+            decimal minZ = triangulation.points[0].Z;
+            decimal maxZ = triangulation.points[0].Z;
             foreach (Point p in triangulation.points)
             {
                 if (p.X > maxX)
@@ -67,17 +67,17 @@ namespace MathModule
             maxY += step;
             maxZ += step;
 
-            double sMinX = minX + (step - (minX % step));
-            double sMinY = minY + (step - (minY % step));
-            double sMinZ = minZ + (step - (minZ % step));
-            double sMaxX = maxX - (maxX % step);
-            double sMaxY = maxY - (maxY % step);
-            double sMaxZ = maxZ - (maxZ % step);
+            decimal sMinX = minX + (step - (minX % step));
+            decimal sMinY = minY + (step - (minY % step));
+            decimal sMinZ = minZ + (step - (minZ % step));
+            decimal sMaxX = maxX - (maxX % step);
+            decimal sMaxY = maxY - (maxY % step);
+            decimal sMaxZ = maxZ - (maxZ % step);
 
             Polygon outerPolygon = new Polygon(new List<Segment>(triangulation.outerEdges));
-            for (double i = sMinX; i < sMaxX; i += step)
+            for (decimal i = sMinX; i < sMaxX; i += step)
             {
-                for(double j = sMinY; j < sMaxY; j += step)
+                for(decimal j = sMinY; j < sMaxY; j += step)
                 {
                     Point nPoint = new Point(i, j, 0);
                     if (outerPolygon.IsInside(nPoint))
@@ -87,7 +87,7 @@ namespace MathModule
                         //    if (tr.IsInside(nPoint))
                         //    {
                         Triangle tr = triangulation.FindTriangle(nPoint);
-                        double[] factors = tr.GetPlanarFactors();
+                        decimal[] factors = tr.GetPlanarFactors();
                         nPoint.Z = ((-nPoint.X * factors[0]) + (-nPoint.Y * factors[1]) - factors[3]) / factors[2];
                         points.Add(nPoint);
                         //        break;
@@ -95,11 +95,11 @@ namespace MathModule
                         //}
                         continue;
                     }
-                    double dist = BMF.GetDistance2D(triangulation.outerEdges[0].points[0],nPoint);
+                    decimal dist = BMF.GetDistance2D(triangulation.outerEdges[0].points[0],nPoint);
                     Point zPoint = triangulation.outerEdges[0].points[0];
                     foreach(TriangulationEdge edge in triangulation.outerEdges)
                     {
-                        double tDist = edge.GetLengthTo2D(nPoint);
+                        decimal tDist = edge.GetLengthTo2D(nPoint);
                         if(dist > tDist)
                         {
                             dist = tDist;
@@ -112,14 +112,14 @@ namespace MathModule
                 }
             }
         }
-        public void CreateFromTriangulation(Triangulation triangulation, Polygon border, double step)
+        public void CreateFromTriangulation(Triangulation triangulation, Polygon border, decimal step)
         {
-            double minX = triangulation.points[0].X;
-            double minY = triangulation.points[0].Y;
-            double maxX = triangulation.points[0].X;
-            double maxY = triangulation.points[0].Y;
-            double minZ = triangulation.points[0].Z;
-            double maxZ = triangulation.points[0].Z;
+            decimal minX = triangulation.points[0].X;
+            decimal minY = triangulation.points[0].Y;
+            decimal maxX = triangulation.points[0].X;
+            decimal maxY = triangulation.points[0].Y;
+            decimal minZ = triangulation.points[0].Z;
+            decimal maxZ = triangulation.points[0].Z;
 
             foreach (Point p in triangulation.points)
             {
@@ -155,20 +155,20 @@ namespace MathModule
             maxY += step;
             maxZ += step;
 
-            double sMinX = minX + (step - (minX % step));
-            double sMinY = minY + (step - (minY % step));
-            double sMinZ = minZ + (step - (minZ % step));
-            double sMaxX = maxX - (maxX % step);
-            double sMaxY = maxY - (maxY % step);
-            double sMaxZ = maxZ - (maxZ % step);
+            decimal sMinX = minX + (step - (minX % step));
+            decimal sMinY = minY + (step - (minY % step));
+            decimal sMinZ = minZ + (step - (minZ % step));
+            decimal sMaxX = maxX - (maxX % step);
+            decimal sMaxY = maxY - (maxY % step);
+            decimal sMaxZ = maxZ - (maxZ % step);
 
 
-            double minXB = border.GetPoints()[0].X;
-            double minYB = border.GetPoints()[0].Y;
-            double maxXB = border.GetPoints()[0].X;
-            double maxYB = border.GetPoints()[0].Y;
-            double minZB = border.GetPoints()[0].Z;
-            double maxZB = border.GetPoints()[0].Z;
+            decimal minXB = border.GetPoints()[0].X;
+            decimal minYB = border.GetPoints()[0].Y;
+            decimal maxXB = border.GetPoints()[0].X;
+            decimal maxYB = border.GetPoints()[0].Y;
+            decimal minZB = border.GetPoints()[0].Z;
+            decimal maxZB = border.GetPoints()[0].Z;
 
             foreach(Point p in border.GetPoints())
             {
@@ -204,17 +204,17 @@ namespace MathModule
             maxYB += step;
             maxZB += step;
 
-            double sMinXB = minXB + (step - (minXB % step));
-            double sMinYB = minYB + (step - (minYB % step));
-            double sMinZB = minZB + (step - (minZB % step));
-            double sMaxXB = maxXB - (maxXB % step);
-            double sMaxYB = maxYB - (maxYB % step);
-            double sMaxZB = maxZB - (maxZB % step);
+            decimal sMinXB = minXB + (step - (minXB % step));
+            decimal sMinYB = minYB + (step - (minYB % step));
+            decimal sMinZB = minZB + (step - (minZB % step));
+            decimal sMaxXB = maxXB - (maxXB % step);
+            decimal sMaxYB = maxYB - (maxYB % step);
+            decimal sMaxZB = maxZB - (maxZB % step);
 
             Polygon outerPolygon = new Polygon(new List<Segment>(triangulation.outerEdges));
-            for (double i = sMinXB; i < sMaxXB; i += step)
+            for (decimal i = sMinXB; i < sMaxXB; i += step)
             {
-                for (double j = sMinYB; j < sMaxYB; j += step)
+                for (decimal j = sMinYB; j < sMaxYB; j += step)
                 {
                     Point nPoint = new Point(i, j, 0);
                     if (border.IsInside(nPoint))
@@ -226,7 +226,7 @@ namespace MathModule
                             //    if (tr.IsPointInsideTriangle(nPoint))
                             //    {
                             Triangle tr = triangulation.FindTriangle_Borders(nPoint);
-                            double[] factors = tr.GetPlanarFactors();
+                            decimal[] factors = tr.GetPlanarFactors();
                             nPoint.Z = ((-nPoint.X * factors[0]) + (-nPoint.Y * factors[1]) - factors[3]) / factors[2];
                             points.Add(nPoint);
                             //break;
@@ -235,7 +235,7 @@ namespace MathModule
                         }
                         continue;
                     }
-                    double dist = border.GetDistance2DToPoint(nPoint);
+                    decimal dist = border.GetDistance2DToPoint(nPoint);
                     if (dist > step)
                     {
                         continue;
@@ -247,7 +247,7 @@ namespace MathModule
                         //    if (tr.IsPointInsideTriangle(nPoint))
                         //    {
                         Triangle tr = triangulation.FindTriangle_Borders(nPoint);
-                        double[] factors = tr.GetPlanarFactors();
+                        decimal[] factors = tr.GetPlanarFactors();
                         nPoint.Z = ((-nPoint.X * factors[0]) + (-nPoint.Y * factors[1]) - factors[3]) / factors[2];
                         points.Add(nPoint);
                         //break;

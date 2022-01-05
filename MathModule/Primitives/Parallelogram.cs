@@ -17,12 +17,12 @@ namespace MathModule
             this.points[2] = p3;
             this.points[3] = p4;
         }
-        public Parallelogram(double minX, double minY, double maxX, double maxY)
+        public Parallelogram(decimal minX, decimal minY, decimal maxX, decimal maxY)
         {
-            Point p1 = new Point(minX, minY, 0d);
-            Point p2 = new Point(minX, maxY, 0d);
-            Point p3 = new Point(maxX, maxY, 0d);
-            Point p4 = new Point(maxX, minY, 0d);
+            Point p1 = new Point(minX, minY, 0m);
+            Point p2 = new Point(minX, maxY, 0m);
+            Point p3 = new Point(maxX, maxY, 0m);
+            Point p4 = new Point(maxX, minY, 0m);
 
             List<Segment> segments = new List<Segment>() {
             new TriangulationEdge(p1, p2),
@@ -36,9 +36,9 @@ namespace MathModule
             this.points[2] = p3;
             this.points[3] = p4;
         }
-        public double GetMinX()
+        public decimal GetMinX()
         {
-            double result = points[0].X;
+            decimal result = points[0].X;
             foreach(Point p in points)
             {
                 if(p.X < result)
@@ -48,9 +48,9 @@ namespace MathModule
             }
             return result;
         }
-        public double GetMaxX()
+        public decimal GetMaxX()
         {
-            double result = points[0].X;
+            decimal result = points[0].X;
             foreach (Point p in points)
             {
                 if (p.X > result)
@@ -60,9 +60,9 @@ namespace MathModule
             }
             return result;
         }
-        public double GetMinY()
+        public decimal GetMinY()
         {
-            double result = points[0].Y;
+            decimal result = points[0].Y;
             foreach (Point p in points)
             {
                 if (p.Y < result)
@@ -72,9 +72,9 @@ namespace MathModule
             }
             return result;
         }
-        public double GetMaxY()
+        public decimal GetMaxY()
         {
-            double result = points[0].Y;
+            decimal result = points[0].Y;
             foreach (Point p in points)
             {
                 if (p.Y > result)

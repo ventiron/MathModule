@@ -573,19 +573,19 @@ namespace MathModule
         private bool IsDelone(Triangle tr1, Triangle tr2)
         {
             Point[] points = tr1.GetPoints(tr2);
-            double dx0 = (points[0].X - points[1].X);
-            double dx1 = (points[0].X - points[3].X);
-            double dy0 = (points[0].Y - points[1].Y);
-            double dy1 = (points[0].Y - points[3].Y);
+            decimal dx0 = (points[0].X - points[1].X);
+            decimal dx1 = (points[0].X - points[3].X);
+            decimal dy0 = (points[0].Y - points[1].Y);
+            decimal dy1 = (points[0].Y - points[3].Y);
 
-            double dx2 = (points[2].X - points[1].X);
-            double dx3 = (points[2].X - points[3].X);
-            double dy2 = (points[2].Y - points[1].Y);
-            double dy3 = (points[2].Y - points[3].Y);
+            decimal dx2 = (points[2].X - points[1].X);
+            decimal dx3 = (points[2].X - points[3].X);
+            decimal dy2 = (points[2].Y - points[1].Y);
+            decimal dy3 = (points[2].Y - points[3].Y);
 
-            double st1 = dx0 * dx1 + dy0 * dy1;
-            double st2 = dx2 * dx3 + dy2 * dy3;
-            if (st1 >= 0d && st2 >= 0d)
+            decimal st1 = dx0 * dx1 + dy0 * dy1;
+            decimal st2 = dx2 * dx3 + dy2 * dy3;
+            if (st1 >= 0m && st2 >= 0m)
             {
                 return true;
             }
@@ -593,7 +593,7 @@ namespace MathModule
             return (Math.Abs(dx0 * dy1 - dx1 * dy0)
                 * (st2)
                 + (st1)
-                * Math.Abs(dx3 * dy2 - dx2 * dy3)) >= 0d;
+                * Math.Abs(dx3 * dy2 - dx2 * dy3)) >= 0m;
         }
 
 
@@ -606,7 +606,7 @@ namespace MathModule
         /// <returns></returns>
         private bool IsCollinear(Point p1, Point p2, Point p3)
         {
-            if (BMF.Deq((p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y), 0d))
+            if (BMF.Deq((p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y), 0m))
             {
                 return true;
             }
@@ -1109,7 +1109,7 @@ namespace MathModule
 
 
 
-        public void CreateIsolines(double step)
+        public void CreateIsolines(decimal step)
         {
             try
             {
@@ -1119,8 +1119,8 @@ namespace MathModule
                 Point min = searchArray.GetMin();
                 Point max = searchArray.GetMax();
 
-                double absoluteHeight = min.Z + (step - (min.Z % step));
-                double currentHeight = absoluteHeight;
+                decimal absoluteHeight = min.Z + (step - (min.Z % step));
+                decimal currentHeight = absoluteHeight;
                 bool isEdgeOnPlaneHeight = false;
                 while (absoluteHeight < max.Z)
                 {
@@ -1154,7 +1154,7 @@ namespace MathModule
                 MessageBox.Show(e.ToString());
             }
         }
-        public void CreateBorderIsoline(double height)
+        public void CreateBorderIsoline(decimal height)
         {
             foreach (TriangulationEdge edge in outerEdges)
             {
@@ -1235,7 +1235,7 @@ namespace MathModule
 
 
 
-        public void CreateInnerIsoline(double height)
+        public void CreateInnerIsoline(decimal height)
         {
             foreach (Triangle tr in triangles)
             {
@@ -1284,7 +1284,7 @@ namespace MathModule
                 innerIsolines.Add(isoline);
             }
         }
-        private void MarkTrianglesForIsoline(double height)
+        private void MarkTrianglesForIsoline(decimal height)
         {
             foreach (Triangle tr in triangles)
             {
@@ -1298,7 +1298,7 @@ namespace MathModule
                 }
             }
         }
-        private bool IsHeightInEdge(TriangulationEdge edge, double height)
+        private bool IsHeightInEdge(TriangulationEdge edge, decimal height)
         {
             if ((edge.points[0].Z <= height && height <= edge.points[1].Z) || (edge.points[0].Z >= height && height >= edge.points[1].Z))
             {

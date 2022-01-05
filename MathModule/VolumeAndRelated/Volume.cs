@@ -8,19 +8,19 @@ namespace MathModule
 {
     public class Volume
     {
-        public static double TetraederVolume(Triangle basis, Point top)
+        public static decimal TetraederVolume(Triangle basis, Point top)
         {
             Point[] points = basis.GetPoints();
             Vector3D v1 = new Vector3D(top, points[0]);
             Vector3D v2 = new Vector3D(top, points[1]);
             Vector3D v3 = new Vector3D(top, points[2]);
-            return Math.Abs(MxF.Det(new double[3, 3] { { v1.X, v1.Y, v1.Z }, { v2.X, v2.Y, v2.Z }, { v3.X, v3.Y, v3.Z } }))/6;
+            return Math.Abs(MxF.Det(new decimal[3, 3] { { v1.X, v1.Y, v1.Z }, { v2.X, v2.Y, v2.Z }, { v3.X, v3.Y, v3.Z } }))/6;
         }
-        public static double TruncatedTrianglePiramidVolumeForRegularModel(Triangle top, Triangle bottom)
+        public static decimal TruncatedTrianglePiramidVolumeForRegularModel(Triangle top, Triangle bottom)
         {
-            double area1 = TetraederVolume(top, bottom.GetPoints()[0]);
-            double area2 = TetraederVolume(bottom, top.GetPoints()[1]);
-            double area3 = TetraederVolume(new Triangle(
+            decimal area1 = TetraederVolume(top, bottom.GetPoints()[0]);
+            decimal area2 = TetraederVolume(bottom, top.GetPoints()[1]);
+            decimal area3 = TetraederVolume(new Triangle(
                 new TriangulationEdge(top.GetPoints()[1], bottom.GetPoints()[0]),
                 new TriangulationEdge(bottom.GetPoints()[0], bottom.GetPoints()[2]),
                 new TriangulationEdge(bottom.GetPoints()[2], top.GetPoints()[1])),
@@ -29,11 +29,11 @@ namespace MathModule
             return area1 + area2 + area3;
         }
 
-        public static double[] RectangleVolumeForRegularModel(Parallelogram rec1, Parallelogram rec2)
+        public static decimal[] RectangleVolumeForRegularModel(Parallelogram rec1, Parallelogram rec2)
         {
-            double[] result = new double[3];
-            double topMoreBottom = 0;
-            double bottomMoreTop = 0;
+            decimal[] result = new decimal[3];
+            decimal topMoreBottom = 0;
+            decimal bottomMoreTop = 0;
             for (int j = 0; j < 2; j++)
             {
                 Triangle trTop = null;
@@ -79,7 +79,7 @@ namespace MathModule
                                 break;
                             }
                         }
-                        double res = TetraederVolume(trBottom, top);
+                        decimal res = TetraederVolume(trBottom, top);
                         if (top.Z > bottom.Z)
                         {
                             topMoreBottom += res;
@@ -139,7 +139,7 @@ namespace MathModule
                         Point inter = edge2.GetClosestPoint3D(edge1);
                         inter.id = "inter";
 
-                        double res1 = TetraederVolume(new Triangle(
+                        decimal res1 = TetraederVolume(new Triangle(
                             new TriangulationEdge(trTop.GetPoints()[intersect], inter),
                             new TriangulationEdge(inter, trBottom.GetPoints()[notInter[0]]),
                             new TriangulationEdge(trBottom.GetPoints()[notInter[0]], trTop.GetPoints()[intersect])),
@@ -154,7 +154,7 @@ namespace MathModule
                             bottomMoreTop += res1;
                         }
 
-                        double res2 = TetraederVolume(new Triangle(
+                        decimal res2 = TetraederVolume(new Triangle(
                             new TriangulationEdge(trTop.GetPoints()[intersect], inter),
                             new TriangulationEdge(inter, trBottom.GetPoints()[notInter[1]]),
                             new TriangulationEdge(trBottom.GetPoints()[notInter[1]], trTop.GetPoints()[intersect])),
@@ -234,8 +234,8 @@ namespace MathModule
                             new TriangulationEdge(inter2, trBottom.GetPoints()[common[1]]),
                             new TriangulationEdge(trBottom.GetPoints()[common[1]], trTop.GetPoints()[common[1]]));
 
-                        double bigRes = TruncatedTrianglePiramidVolumeForRegularModel(tr1, tr2);
-                        double smalRes = TetraederVolume(new Triangle(
+                        decimal bigRes = TruncatedTrianglePiramidVolumeForRegularModel(tr1, tr2);
+                        decimal smalRes = TetraederVolume(new Triangle(
                             new TriangulationEdge(inter1, inter2),
                             new TriangulationEdge(inter2, trBottom.GetPoints()[differ]),
                             new TriangulationEdge(trBottom.GetPoints()[differ], inter1)), trTop.GetPoints()[differ]);

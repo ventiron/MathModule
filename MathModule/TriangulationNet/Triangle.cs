@@ -364,7 +364,7 @@ namespace MathModule
             }
         }
 
-        public bool IsEdgeOnHeightPlane(double height)
+        public bool IsEdgeOnHeightPlane(decimal height)
         {
             foreach(TriangulationEdge edge in edges)
             {
@@ -394,19 +394,19 @@ namespace MathModule
             }
             return null;
         }
-        public double[] GetPlanarFactors()
+        public decimal[] GetPlanarFactors()
         {
-            double[] result = new double[4]; // Массив для хранения результата
+            decimal[] result = new decimal[4]; // Массив для хранения результата
             Point[] points = this.GetPoints();  // Получаем точки текущего треугольника
             Vector3D vec1 = new Vector3D(new TriangulationEdge(points[0], points[1]));  // Создаём вектор из точек 0 и 1
             Vector3D vec2 = new Vector3D(new TriangulationEdge(points[0], points[2]));  // Создаём вестор из точек 0 и 2
-            result[0] = MxF.Det(new double[2, 2] { { vec1.Y, vec2.Y }, { vec1.Z, vec2.Z } }); // Через детерминант находим все коэффициенты
-            result[1] = - MxF.Det(new double[2, 2] { { vec1.X, vec2.X }, { vec1.Z, vec2.Z } });
-            result[2] = MxF.Det(new double[2, 2] { { vec1.X, vec2.X }, { vec1.Y, vec2.Y } });
+            result[0] = MxF.Det(new decimal[2, 2] { { vec1.Y, vec2.Y }, { vec1.Z, vec2.Z } }); // Через детерминант находим все коэффициенты
+            result[1] = - MxF.Det(new decimal[2, 2] { { vec1.X, vec2.X }, { vec1.Z, vec2.Z } });
+            result[2] = MxF.Det(new decimal[2, 2] { { vec1.X, vec2.X }, { vec1.Y, vec2.Y } });
             result[3] = (-points[0].X * result[0]) + (-points[0].Y * result[1]) + (-points[0].Z * result[2]); // Через полученные коэффициенты находим последний
             return result;
         }
-        public new double GetArea()
+        public new decimal GetArea()
         {
             Point[] points = this.GetPoints();
             Vector3D vec3d1 = new Vector3D(points[0], points[1]);
@@ -417,9 +417,9 @@ namespace MathModule
         public new bool IsInside(Point point)
         {
             Point[] points = this.GetPoints();
-            double k1 = (points[0].X - point.X) * (points[1].Y - point.Y) - (points[1].X - point.X) * (points[0].Y - point.Y);
-            double k2 = (points[1].X - point.X) * (points[2].Y - point.Y) - (points[2].X - point.X) * (points[1].Y - point.Y);
-            double k3 = (points[2].X - point.X) * (points[0].Y - point.Y) - (points[0].X - point.X) * (points[2].Y - point.Y);
+            decimal k1 = (points[0].X - point.X) * (points[1].Y - point.Y) - (points[1].X - point.X) * (points[0].Y - point.Y);
+            decimal k2 = (points[1].X - point.X) * (points[2].Y - point.Y) - (points[2].X - point.X) * (points[1].Y - point.Y);
+            decimal k3 = (points[2].X - point.X) * (points[0].Y - point.Y) - (points[0].X - point.X) * (points[2].Y - point.Y);
 
             bool result = (k1 > 0 && k2 > 0 && k3 > 0) || (k1 < 0 && k2 < 0 && k3 < 0) || BMF.Deq(k1, 0) || BMF.Deq(k2, 0) || BMF.Deq(k3, 0);
 

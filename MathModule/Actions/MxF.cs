@@ -15,13 +15,13 @@ namespace MathModule
         /// <param name="mat1">Первая матрица, в виде многомерного массива</param>
         /// <param name="mat2">Вторая матрица, в виде многомерного массива</param>
         /// <returns></returns>
-        public static double[,] Sum(double[,] mat1, double[,] mat2)
+        public static decimal[,] Sum(decimal[,] mat1, decimal[,] mat2)
         {
             if (!IsSameSize(mat1, mat2))
             {
                 return null;
             }
-            double[,] result = new double[mat1.GetLength(0), mat1.GetLength(1)];
+            decimal[,] result = new decimal[mat1.GetLength(0), mat1.GetLength(1)];
             for (int i = 0; i < mat1.GetLength(0); i++)
             {
                 for (int j = 0; j < mat1.GetLength(1); j++)
@@ -39,13 +39,13 @@ namespace MathModule
         /// <param name="mat1">Первая матрица, в виде многомерного массива</param>
         /// <param name="mat2">Вторая матрица, в виде многомерного массива</param>
         /// <returns></returns>
-        public static double[,] Mult(double[,] mat1, double[,] mat2)
+        public static decimal[,] Mult(decimal[,] mat1, decimal[,] mat2)
         {
             if (!IsMultPossible(mat1, mat2))
             {
                 throw new ArgumentOutOfRangeException("mat1, mat2", "Неверный формат матриц, число столбцов первой матрицы должно совпадать с числом строк второй матрицы");
             }
-            double[,] result = new double[mat1.GetLength(0), mat2.GetLength(1)];
+            decimal[,] result = new decimal[mat1.GetLength(0), mat2.GetLength(1)];
             for (int i = 0; i < mat2.GetLength(1); i++)
             {
                 for (int j = 0; j < mat1.GetLength(0); j++)
@@ -66,9 +66,9 @@ namespace MathModule
         /// </summary>
         /// <param name="mat"></param>
         /// <returns></returns>
-        public static double Det(double[,] mat)
+        public static decimal Det(decimal[,] mat)
         {
-            double result = 0;
+            decimal result = 0;
             if (mat.GetLength(0) != mat.GetLength(1))
             {
                 throw new ArgumentOutOfRangeException("mat", "Детерминант возможно найти только у квадратной матрицы");
@@ -95,7 +95,7 @@ namespace MathModule
         /// <param name="row"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public static double[,] GetSubMatrix(double[,] mat, int row, int column)
+        public static decimal[,] GetSubMatrix(decimal[,] mat, int row, int column)
         {
             if (mat.GetLength(0) != mat.GetLength(1) || mat.GetLength(0) == 1 || mat.GetLength(1) == 1)
             {
@@ -105,7 +105,7 @@ namespace MathModule
             {
                 throw new IndexOutOfRangeException("Выбранная строка или столбец выходят за пределы матрицы");
             }
-            double[,] result = new double[mat.GetLength(0) - 1, mat.GetLength(1) - 1];
+            decimal[,] result = new decimal[mat.GetLength(0) - 1, mat.GetLength(1) - 1];
 
             int rowCount = 0;
             int columnCount = 0;
@@ -135,7 +135,7 @@ namespace MathModule
         /// <param name="mat1">Первая матрица, в виде многомерного массива</param>
         /// <param name="mat2">Вторая матрица, в виде многомерного массива</param>
         /// <returns></returns>
-        public static bool IsSameSize(double[,] mat1, double[,] mat2)
+        public static bool IsSameSize(decimal[,] mat1, decimal[,] mat2)
         {
             return mat1.GetLength(0) == mat2.GetLength(0) && mat1.GetLength(1) == mat2.GetLength(1);
         }
@@ -148,7 +148,7 @@ namespace MathModule
         /// <param name="mat1"></param>
         /// <param name="mat2"></param>
         /// <returns></returns>
-        public static bool IsMultPossible(double[,] mat1, double[,] mat2)
+        public static bool IsMultPossible(decimal[,] mat1, decimal[,] mat2)
         {
 
             return mat1.GetLength(1) == mat2.GetLength(0);
@@ -159,9 +159,9 @@ namespace MathModule
         /// <param name="row_colummn"></param>
         /// <param name="isRow"></param>
         /// <returns></returns>
-        public static double[] GetFactors(double[,] mat)
+        public static decimal[] GetFactors(decimal[,] mat)
         {
-            double[] result = new double[mat.GetLength(1)];
+            decimal[] result = new decimal[mat.GetLength(1)];
             for(int i = 0; i < result.Length; i++)
             {
                 result[i] = Det(GetSubMatrix(mat, 0, i));
@@ -170,14 +170,14 @@ namespace MathModule
             return result;
         }
 
-        public static double GetMinod(double[,] mat, int row, int column)
+        public static decimal GetMinod(decimal[,] mat, int row, int column)
         {
             return Det(GetSubMatrix(mat, row, column));
         }
 
-        public static double[,] InverseMat(double[,] mat)
+        public static decimal[,] InverseMat(decimal[,] mat)
         {
-            double[,] result = new double[mat.GetLength(1), mat.GetLength(0)];
+            decimal[,] result = new decimal[mat.GetLength(1), mat.GetLength(0)];
             for (int i = 0; i < mat.GetLength(0); i++)
             {
                 for (int j = 0; j < mat.GetLength(1); j++)
