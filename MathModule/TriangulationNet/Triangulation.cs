@@ -9,10 +9,10 @@ using System.IO;
 
 namespace MathModule
 {
-    /// <Triangulation>
+    /// <summary>
     /// Адский пиздец на который ты сам подписался.
     /// Цель класса - создание, обработка и хранение триангуляции построенной на определённом множестве точек
-    /// </Triangulation>
+    /// </summary>
     public class Triangulation : MathObject
     {
         public int insideCount = 0;
@@ -29,7 +29,6 @@ namespace MathModule
         /// </переменные>
         TriangulationSearchMassive searchArray;
         int loopCount;
-        int precision;
 
 
         /// <Переменные - массивы>
@@ -54,10 +53,6 @@ namespace MathModule
         {
             loopCount = 0;
 
-            //currentPlanarMod = 1;
-            //planarMod = 1;
-            //planarBorder = 4 * planarMod;
-            //section = 0;
 
 
             points = new List<Point>();
@@ -529,22 +524,22 @@ namespace MathModule
                     outerEdges.Add(edge);
                 }
             }
-            for (int i = 0; i < planar.GetUpperBound(0); i++)
-            {
-                for (int j = 0; j < planar.GetUpperBound(1); j++)
-                {
-                    if (planar[i, j].GetTriangle() == tr)
-                    {
-                        foreach (Triangle bTr in tr.GetBorderTriangles())
-                        {
-                            if (bTr != null)
-                            {
-                                planar[i, j].SetTriangle(bTr);
-                            }
-                        }
-                    }
-                }
-            }
+            //for (int i = 0; i < planar.GetUpperBound(0); i++)
+            //{
+            //    for (int j = 0; j < planar.GetUpperBound(1); j++)
+            //    {
+            //        if (planar[i, j].GetTriangle() == tr)
+            //        {
+            //            foreach (Triangle bTr in tr.GetBorderTriangles())
+            //            {
+            //                if (bTr != null)
+            //                {
+            //                    planar[i, j].SetTriangle(bTr);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         public void DeleteEdge(TriangulationEdge edge)
@@ -686,8 +681,6 @@ namespace MathModule
         public Triangle FindTriangle(Point point, bool absoluteCheck = true)
         {
             Random rand = new Random();
-            //Triangle tr = triangles[rand.Next(triangles.Count - 1)];
-            //MessageBox.Show(Math.Truncate((point.X - minX) / section).ToString() + "\n" + Math.Truncate((point.Y - minY) / section).ToString());
             Triangle tr = null;
             if (point.GetDistance2D(triangles.Last().GetCentroid()) < searchArray.GetSection())
             {
@@ -695,7 +688,6 @@ namespace MathModule
             }
             else
             {
-                //tr = planar[Convert.ToInt32(Math.Truncate((point.X - minX) / section)), Convert.ToInt32(Math.Truncate((point.Y - minY) / section))].GetTriangle();
                 tr = searchArray.GetTriangleByPoint(point);
             }
             Point Center;
@@ -773,7 +765,6 @@ namespace MathModule
                 }
                 if (count >= 3 || tr == null)
                 {
-                    if (count > 3) MessageBox.Show("Что-то не так в поиске");
                     return tr;
                 }
                 count = 0;
@@ -784,7 +775,7 @@ namespace MathModule
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public Triangle FindTriangle_Borders(Point point)
+        public Triangle FindTriangle_Borders(Point point, bool absoluteCheck = true)
         {
             Random rand = new Random();
             Point testPoint = triangles.Last().GetCentroid();
@@ -843,19 +834,35 @@ namespace MathModule
                 count = 0;
                 foreach (TriangulationEdge edge in tr.edges)
                 {
-                    Point pt = edge.GetIntersection2D(Center, point);
                     if (edge.isPointBelongToSegment(point))
                     {
                         return tr;
                     }
-                    if (pt == null || edge == currentEdge)
+                    TriangulationEdge interEdge = new TriangulationEdge(Center, point);
+                    Point pt = edge.GetIntersection2D(interEdge);
+                    Point pInter = tr.GetPointBelongingToSegment(interEdge);
+                    if (pt == null && absoluteCheck)
+                    {
+                        Point min = BMF.GetMin(new List<Point>(tr.GetPoints()));
+                        Point max = BMF.GetMax(new List<Point>(tr.GetPoints()));
+                        Center.X = Center.X + (max.X - min.X) / 10000;
+                        pt = edge.GetIntersection2D(interEdge);
+                        pInter = tr.GetPointBelongingToSegment(interEdge);
+                        if (pt == null)
+                        {
+                            Center.Y = Center.Y + (max.Y - min.Y) / 10000;
+                            pt = edge.GetIntersection2D(interEdge);
+                            pInter = tr.GetPointBelongingToSegment(interEdge);
+                        }
+                    }
+                    if ((pt == null || edge == currentEdge) && pInter == null)
                     {
                         count++;
                         continue;
                     }
-                    if (tr.IsPointIntersect2D(pt))
+                    if (pInter != null)
                     {
-                        TriangulationEdge[] testEdges = tr.GetEdgesByPoint(tr.PointIntersect2D(pt));
+                        TriangulationEdge[] testEdges = tr.GetEdgesByPoint(tr.PointIntersect2D(pInter));
                         if (testEdges[0].isBorderEdge() && testEdges[1].isBorderEdge())
                         {
                             return null;
@@ -1567,133 +1574,133 @@ namespace MathModule
 
         /// <summary>
         /// Сохраняет триангуляцию в файл по заданному пути. Если файла по пути нет, то он создаётся.
+        /// При успешной записи возвращает True, при возникновении ошибки, или при нулевом пути - False.
         /// </summary>
         /// <param name="filePath">Путь к файлу</param>
-        public void Save(string filePath)
+        public bool Save(string filePath)
         {
-
-
-
-            Queue<TriangulationEdge> ActiveEdges = new Queue<TriangulationEdge>();
-            Triangle StartTriangle = this.triangles[0];
-            if (StartTriangle == null) return;
-
-            StringBuilder saveString = new StringBuilder();
-            StartTriangle.SetStatus(2);
-
-            Point[] tPoints = StartTriangle.GetPoints();
-            //tPoints[0].id = "1";
-            //tPoints[1].id = "2";
-            //tPoints[2].id = "3";
-
-            ActiveEdges.Enqueue(StartTriangle.GetEdgeByPoints(tPoints[0], tPoints[1]));
-            ActiveEdges.Enqueue(StartTriangle.GetEdgeByPoints(tPoints[1], tPoints[2]));
-            ActiveEdges.Enqueue(StartTriangle.GetEdgeByPoints(tPoints[2], tPoints[0]));
-
-            StartTriangle.edges[0].SetStatus(2);
-            StartTriangle.edges[1].SetStatus(2);
-            StartTriangle.edges[2].SetStatus(2);
-
-            saveString.Append(tPoints[0]);
-            saveString.Append(tPoints[1]);
-            saveString.Append(tPoints[2]);
-            saveString.Append(StartTriangle.GetEdgeByPoints(tPoints[1], tPoints[2]).points[0] == tPoints[1] ? "0\n" : "1\n");
-            saveString.Append(StartTriangle.GetEdgeByPoints(tPoints[2], tPoints[0]).points[0] == tPoints[2] ? "0\n" : "1\n");
-            tPoints[0].SetStatus(2);
-            tPoints[1].SetStatus(2);
-            tPoints[2].SetStatus(2);
-
-
-            for (; ActiveEdges.Count > 0;)
-            {
-                TriangulationEdge edge = ActiveEdges.Dequeue();
-                if (edge.isBorderEdge())
-                {
-                    saveString.Append(saveString2 + "\n");
-                    continue;
-                }
-                Triangle currentTriangle = edge.triangles[0].GetStatus() == 2 ? edge.triangles[1] : edge.triangles[0];
-                int count = 0;
-                foreach (TriangulationEdge currentTriangleEdge in currentTriangle.edges)
-                {
-                    if (currentTriangleEdge.GetStatus() == 2) count++;
-                }
-                switch (count)
-                {
-                    case 0:
-                        throw new AggregateException("Во время записи выбран \"чистый\" треугольник");
-                    case 1:
-                        Point point = currentTriangle.GetOtherPoint(edge.points[0], edge.points[1]);
-                        if (point == null) throw new AggregateException("Что-то не так со ссылками на треугольники в ребре");
-                        if (point.GetStatus() == 2)
-                        {
-                            saveString.Append(saveString3 + "\n");
-                        }
-                        else
-                        {
-                            
-                            saveString.Append($"{saveString1}\n{point}");
-                            TriangulationEdge[] edges = currentTriangle.GetEdgesByPoint(point);
-                            saveString.Append(point == currentTriangle.GetEdgeByPoints(point, edge.points[0]).points[0] ? "0\n" : "1\n");
-                            saveString.Append(point == currentTriangle.GetEdgeByPoints(point, edge.points[1]).points[0] ? "0\n" : "1\n");
-                            ActiveEdges.Enqueue(currentTriangle.GetEdgeByPoints(point, edge.points[0]));
-                            ActiveEdges.Enqueue(currentTriangle.GetEdgeByPoints(point, edge.points[1]));
-                            currentTriangle.SetStatus(2);
-                            edges[0].SetStatus(2);
-                            edges[1].SetStatus(2);
-                            point.SetStatus(2);
-                        }
-                        break;
-                    case 2:
-                        Point point1 = currentTriangle.GetOtherPoint(edge.points[0], edge.points[1]);
-                        if (point1 == null) throw new AggregateException("Что-то не так со ссылками на треугольники в ребре");
-                        if (point1.GetStatus() != 2)
-                        {
-                            throw new AggregateException("Статус точки не был изменён не смотря на использование");
-                        }
-                        else
-                        {
-                            //Vertex1
-                            if (currentTriangle.GetEdgeByPoints(point1, edge.points[0]).GetStatus() == 2)
-                            {
-                                saveString.Append($"{saveString5}\n");
-                                TriangulationEdge fEdge = currentTriangle.GetEdgeByPoints(point1, edge.points[1]);
-                                ActiveEdges.Enqueue(fEdge);
-                                currentTriangle.SetStatus(2);
-                                fEdge.SetStatus(2);
-                                saveString.Append(point1 == fEdge.points[0] ? "0\n" : "1\n");
-                            }
-                            //Vertex0
-                            else if (currentTriangle.GetEdgeByPoints(point1, edge.points[1]).GetStatus() == 2)
-                            {
-                                saveString.Append($"{saveString4}\n");
-                                TriangulationEdge fEdge = currentTriangle.GetEdgeByPoints(point1, edge.points[0]);
-                                ActiveEdges.Enqueue(fEdge);
-                                currentTriangle.SetStatus(2);
-                                fEdge.SetStatus(2);
-                                saveString.Append(point1 == fEdge.points[0] ? "0\n" : "1\n");
-                            }
-                        }
-                        break;
-                    case 3:
-                        //throw new AggregateException("Во время записи выбран уже записанный треугольник");
-                        saveString.Append(saveString3 + "\n");
-                        currentTriangle.SetStatus(2);
-                        break;
-                    default:
-                        throw new AggregateException("Во время записи Слишком большое значение в count");
-                }
-            }
             try
             {
+                Queue<TriangulationEdge> ActiveEdges = new Queue<TriangulationEdge>();
+                Triangle StartTriangle = this.triangles[0];
+                if (StartTriangle == null) return false;
+
+                StringBuilder saveString = new StringBuilder();
+                StartTriangle.SetStatus(2);
+
+                Point[] tPoints = StartTriangle.GetPoints();
+                //tPoints[0].id = "1";
+                //tPoints[1].id = "2";
+                //tPoints[2].id = "3";
+
+                ActiveEdges.Enqueue(StartTriangle.GetEdgeByPoints(tPoints[0], tPoints[1]));
+                ActiveEdges.Enqueue(StartTriangle.GetEdgeByPoints(tPoints[1], tPoints[2]));
+                ActiveEdges.Enqueue(StartTriangle.GetEdgeByPoints(tPoints[2], tPoints[0]));
+
+                StartTriangle.edges[0].SetStatus(2);
+                StartTriangle.edges[1].SetStatus(2);
+                StartTriangle.edges[2].SetStatus(2);
+
+                saveString.Append(tPoints[0]);
+                saveString.Append(tPoints[1]);
+                saveString.Append(tPoints[2]);
+                saveString.Append(StartTriangle.GetEdgeByPoints(tPoints[1], tPoints[2]).points[0] == tPoints[1] ? "0\n" : "1\n");
+                saveString.Append(StartTriangle.GetEdgeByPoints(tPoints[2], tPoints[0]).points[0] == tPoints[2] ? "0\n" : "1\n");
+                tPoints[0].SetStatus(2);
+                tPoints[1].SetStatus(2);
+                tPoints[2].SetStatus(2);
+
+
+                for (; ActiveEdges.Count > 0;)
+                {
+                    TriangulationEdge edge = ActiveEdges.Dequeue();
+                    if (edge.isBorderEdge())
+                    {
+                        saveString.Append(saveString2 + "\n");
+                        continue;
+                    }
+                    Triangle currentTriangle = edge.triangles[0].GetStatus() == 2 ? edge.triangles[1] : edge.triangles[0];
+                    int count = 0;
+                    foreach (TriangulationEdge currentTriangleEdge in currentTriangle.edges)
+                    {
+                        if (currentTriangleEdge.GetStatus() == 2) count++;
+                    }
+                    switch (count)
+                    {
+                        case 0:
+                            throw new AggregateException("Во время записи выбран \"чистый\" треугольник");
+                        case 1:
+                            Point point = currentTriangle.GetOtherPoint(edge.points[0], edge.points[1]);
+                            if (point == null) throw new AggregateException("Что-то не так со ссылками на треугольники в ребре");
+                            if (point.GetStatus() == 2)
+                            {
+                                saveString.Append(saveString3 + "\n");
+                            }
+                            else
+                            {
+
+                                saveString.Append($"{saveString1}\n{point}");
+                                TriangulationEdge[] edges = currentTriangle.GetEdgesByPoint(point);
+                                saveString.Append(point == currentTriangle.GetEdgeByPoints(point, edge.points[0]).points[0] ? "0\n" : "1\n");
+                                saveString.Append(point == currentTriangle.GetEdgeByPoints(point, edge.points[1]).points[0] ? "0\n" : "1\n");
+                                ActiveEdges.Enqueue(currentTriangle.GetEdgeByPoints(point, edge.points[0]));
+                                ActiveEdges.Enqueue(currentTriangle.GetEdgeByPoints(point, edge.points[1]));
+                                currentTriangle.SetStatus(2);
+                                edges[0].SetStatus(2);
+                                edges[1].SetStatus(2);
+                                point.SetStatus(2);
+                            }
+                            break;
+                        case 2:
+                            Point point1 = currentTriangle.GetOtherPoint(edge.points[0], edge.points[1]);
+                            if (point1 == null) throw new AggregateException("Что-то не так со ссылками на треугольники в ребре");
+                            if (point1.GetStatus() != 2)
+                            {
+                                throw new AggregateException("Статус точки не был изменён не смотря на использование");
+                            }
+                            else
+                            {
+                                //Vertex1
+                                if (currentTriangle.GetEdgeByPoints(point1, edge.points[0]).GetStatus() == 2)
+                                {
+                                    saveString.Append($"{saveString5}\n");
+                                    TriangulationEdge fEdge = currentTriangle.GetEdgeByPoints(point1, edge.points[1]);
+                                    ActiveEdges.Enqueue(fEdge);
+                                    currentTriangle.SetStatus(2);
+                                    fEdge.SetStatus(2);
+                                    saveString.Append(point1 == fEdge.points[0] ? "0\n" : "1\n");
+                                }
+                                //Vertex0
+                                else if (currentTriangle.GetEdgeByPoints(point1, edge.points[1]).GetStatus() == 2)
+                                {
+                                    saveString.Append($"{saveString4}\n");
+                                    TriangulationEdge fEdge = currentTriangle.GetEdgeByPoints(point1, edge.points[0]);
+                                    ActiveEdges.Enqueue(fEdge);
+                                    currentTriangle.SetStatus(2);
+                                    fEdge.SetStatus(2);
+                                    saveString.Append(point1 == fEdge.points[0] ? "0\n" : "1\n");
+                                }
+                            }
+                            break;
+                        case 3:
+                            //throw new AggregateException("Во время записи выбран уже записанный треугольник");
+                            saveString.Append(saveString3 + "\n");
+                            currentTriangle.SetStatus(2);
+                            break;
+                        default:
+                            throw new AggregateException("Во время записи Слишком большое значение в count");
+                    }
+                }
                 using (StreamWriter writer = new StreamWriter(filePath, false, System.Text.Encoding.Default))
                 {
                     writer.WriteLine(saveString);
                 }
+                return true;
+
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                return false;
             }
         }
 
@@ -1865,12 +1872,6 @@ namespace MathModule
         private void clear()
         {
             loopCount = 0;
-            precision = 5;
-
-            //currentPlanarMod = 1;
-            //planarMod = 3;
-            //planarBorder = 4 * planarMod;
-            //section = 0;
             planar = new LinkCell[1,1];
 
             points = new List<Point>();
