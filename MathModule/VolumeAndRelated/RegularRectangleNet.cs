@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MathModule
@@ -21,204 +22,41 @@ namespace MathModule
         {
             rectangles = new List<Parallelogram>();
         }
-        //public RegularRectangleNet(Triangulation triangulation, double step)
-        //{
-        //    GetPoints() = new List<List<Point>>();
-        //    CreateFromTriangulation(triangulation, step);
-        //}
         public RegularRectangleNet(Triangulation triangulation, Polygon border, double step)
         {
             rectangles = new List<Parallelogram>();
             CreateFromTriangulation(triangulation, border, step);
         }
-        //public void CreateFromTriangulation(Triangulation triangulation, double step)
-        //{
-        //    double minX = triangulation.GetPoints()[0].X;
-        //    double minY = triangulation.GetPoints()[0].Y;
-        //    double maxX = triangulation.GetPoints()[0].X;
-        //    double maxY = triangulation.GetPoints()[0].Y;
-        //    double minZ = triangulation.GetPoints()[0].Z;
-        //    double maxZ = triangulation.GetPoints()[0].Z;
-        //    foreach (Point p in triangulation.GetPoints())
-        //    {
-        //        if (p.X > maxX)
-        //        {
-        //            maxX = p.X;
-        //        }
-        //        if (p.X < minX)
-        //        {
-        //            minX = p.X;
-        //        }
-        //        if (p.Y > maxY)
-        //        {
-        //            maxY = p.Y;
-        //        }
-        //        if (p.Y < minY)
-        //        {
-        //            minY = p.Y;
-        //        }
-        //        if (p.Z > maxZ)
-        //        {
-        //            maxZ = p.Z;
-        //        }
-        //        if (p.Z < minZ)
-        //        {
-        //            minZ = p.Z;
-        //        }
-        //    }
-        //    minX -= step;
-        //    minY -= step;
-        //    minZ -= step;
-        //    maxX += step;
-        //    maxY += step;
-        //    maxZ += step;
-
-        //    double sMinX = minX + (step - (minX % step));
-        //    double sMinY = minY + (step - (minY % step));
-        //    double sMinZ = minZ + (step - (minZ % step));
-        //    double sMaxX = maxX - (maxX % step);
-        //    double sMaxY = maxY - (maxY % step);
-        //    double sMaxZ = maxZ - (maxZ % step);
-
-        //    Polygon outerPolygon = new Polygon(new List<Segment>(triangulation.outerEdges));
-        //    for (double i = sMinX; i < sMaxX; i += step)
-        //    {
-        //        List<Point> tPoints = new List<Point>();
-        //        for (double j = sMinY; j < sMaxY; j += step)
-        //        {
-        //            Point nPoint = new Point(i, j, 0);
-        //            if (outerPolygon.IsInside(nPoint))
-        //            {
-        //                //foreach (Triangle tr in triangulation.triangles)
-        //                //{
-        //                //    if (tr.IsPointInsideTriangle(nPoint1))
-        //                //    {
-        //                Triangle tr = triangulation.FindTriangle_Borders(nPoint);
-        //                double[] factors = tr.GetPlanarFactors();
-        //                nPoint.Z = ((-nPoint.X * factors[0]) + (-nPoint.Y * factors[1]) - factors[3]) / factors[2];
-        //                tPoints.Add(nPoint);
-        //                //break;
-        //                //    }
-        //                //}
-        //                continue;
-        //            }
-        //            double dist = BMF.GetDistance2D(triangulation.outerEdges[0].GetPoints()[0], nPoint);
-        //            Point zPoint = triangulation.outerEdges[0].GetPoints()[0];
-        //            foreach (TriangulationEdge edge in triangulation.outerEdges)
-        //            {
-        //                double tDist = edge.GetLengthTo2D(nPoint);
-        //                if (dist > tDist)
-        //                {
-        //                    dist = tDist;
-        //                    zPoint = edge.GetPoints()[0];
-        //                }
-        //            }
-        //            if (dist > step) continue;
-        //            nPoint.Z = zPoint.Z;
-        //            tPoints.Add(nPoint);
-        //        }
-        //        GetPoints().Add(tPoints);
-        //    }
-        //}
         public void CreateFromTriangulation(Triangulation triangulation, Polygon border, double step)
         {
-            double minX = triangulation.points[0].X;
-            double minY = triangulation.points[0].Y;
-            double maxX = triangulation.points[0].X;
-            double maxY = triangulation.points[0].Y;
-            double minZ = triangulation.points[0].Z;
-            double maxZ = triangulation.points[0].Z;
-
 
             List<Point> BorderPoints = border.GetPoints();
-            double minXB = BorderPoints[0].X;
-            double minYB = BorderPoints[0].Y;
-            double maxXB = BorderPoints[0].X;
-            double maxYB = BorderPoints[0].Y;
-            double minZB = BorderPoints[0].Z;
-            double maxZB = BorderPoints[0].Z;
 
+            Point minPoint = BMF.GetMin(triangulation.points);
+            Point maxPoint = BMF.GetMax(triangulation.points);
+            Point minPointB = BMF.GetMin(BorderPoints);
+            Point maxPointB = BMF.GetMax(BorderPoints);
 
-            foreach (Point p in BorderPoints)
-            {
-                if (p.X > maxXB)
-                {
-                    maxXB = p.X;
-                }
-                if (p.X < minXB)
-                {
-                    minXB = p.X;
-                }
-                if (p.Y > maxYB)
-                {
-                    maxYB = p.Y;
-                }
-                if (p.Y < minYB)
-                {
-                    minYB = p.Y;
-                }
-                if (p.Z > maxZB)
-                {
-                    maxZB = p.Z;
-                }
-                if (p.Z < minZB)
-                {
-                    minZB = p.Z;
-                }
-            }
-            minXB -= step;
-            minYB -= step;
-            minZB -= step;
-            maxXB += step;
-            maxYB += step;
-            maxZB += step;
-            foreach (Point p in triangulation.points)
-            {
-                if (p.X > maxX)
-                {
-                    maxX = p.X;
-                }
-                if (p.X < minX)
-                {
-                    minX = p.X;
-                }
-                if (p.Y > maxY)
-                {
-                    maxY = p.Y;
-                }
-                if (p.Y < minY)
-                {
-                    minY = p.Y;
-                }
-                if (p.Z > maxZ)
-                {
-                    maxZ = p.Z;
-                }
-                if (p.Z < minZ)
-                {
-                    minZ = p.Z;
-                }
-            }
-            //minX -= step;
-            //minY -= step;
-            //minZ -= step;
-            //maxX += step;
-            //maxY += step;
-            //maxZ += step;
+            double sMinXB = minPoint.X + (step - (minPoint.X % step));
+            double sMinYB = minPoint.Y + (step - (minPoint.Y % step));
+            double sMinZB = minPoint.Z + (step - (minPoint.Z % step));
+            double sMaxXB = maxPoint.X - (maxPoint.X % step);
+            double sMaxYB = maxPoint.Y - (maxPoint.Y % step);
+            double sMaxZB = maxPoint.Z - (maxPoint.Z % step);
 
-            //double sMinXB = minX + (step - (minX % step));
-            //double sMinYB = minY + (step - (minY % step));
-            //double sMinZB = minZ + (step - (minZ % step));
-            //double sMaxXB = maxX - (maxX % step);
-            //double sMaxYB = maxY - (maxY % step);
-            //double sMaxZB = maxZ - (maxZ % step);
+            double sMinXBB = minPointB.X + (step - (minPointB.X % step));
+            double sMinYBB = minPointB.Y + (step - (minPointB.Y % step));
+            double sMinZBB = minPointB.Z + (step - (minPointB.Z % step));
+            double sMaxXBB = maxPointB.X - (maxPointB.X % step);
+            double sMaxYBB = maxPointB.Y - (maxPointB.Y % step);
+            double sMaxZBB = maxPointB.Z - (maxPointB.Z % step);
 
-            double sMinXBB = minXB + (step - (minXB % step));
-            double sMinYBB = minYB + (step - (minYB % step));
-            double sMinZBB = minZB + (step - (minZB % step));
-            double sMaxXBB = maxXB - (maxXB % step);
-            double sMaxYBB = maxYB - (maxYB % step);
-            double sMaxZBB = maxZB - (maxZB % step);
+            if (sMinXBB < sMinXB) sMinXBB = sMinXB;
+            if (sMinYBB < sMinYB) sMinYBB = sMinYB;
+            if (sMinZBB < sMinZB) sMinZBB = sMinZB;
+            if (sMaxXBB > sMaxXB) sMaxXBB = sMaxXB;
+            if (sMaxYBB > sMaxYB) sMaxYBB = sMaxYB;
+            if (sMaxZBB > sMaxZB) sMaxZBB = sMaxZB;
 
             this.step = step;
             this.minX = sMinXBB;
@@ -228,39 +66,40 @@ namespace MathModule
             int YCount = 0;
 
             rectanglesArray = new Parallelogram[(int)((sMaxXBB - sMinXBB) / step), (int)((sMaxYBB - sMinYBB) / step)];
+            Point[,] points = new Point[(int)((sMaxXBB - sMinXBB) / step) + 1, (int)((sMaxYBB - sMinYBB) / step) + 1];
 
-            Polygon outerPolygon = new Polygon(new List<Segment>(triangulation.outerEdges));
-            for (double i = sMinXBB; i < sMaxXBB - step * 1.001; i += step)
+
+            List<Task> tasks = new List<Task>();
+            for(int i = 0; sMinXBB < sMaxXBB - step * 0.001 + step - step * i; i++)
             {
-                YCount = 0;
-                List<Point> tPoints = new List<Point>();
-                for (double j = sMinYBB; j < sMaxYBB - step * 1.001; j += step)
+                for (int j = 0; sMinYBB < sMaxYBB - step * 0.001 + step - step * j; j++)
                 {
-                    Point nPoint1 = new Point(i, j, 0);
-                    Point nPoint2 = new Point(i + step, j, 0);
-                    Point nPoint3 = new Point(i + step, j + step, 0);
-                    Point nPoint4 = new Point(i, j + step, 0);
-
-                    FindPointZ(nPoint1, border, triangulation, step);
-                    FindPointZ(nPoint2, border, triangulation, step);
-                    FindPointZ(nPoint3, border, triangulation, step);
-                    FindPointZ(nPoint4, border, triangulation, step);
-
-                    if(BMF.Deq(nPoint1.Z,0) || BMF.Deq(nPoint2.Z, 0) || BMF.Deq(nPoint3.Z, 0) || BMF.Deq(nPoint4.Z, 0))
+                    Point point = new Point(sMinXBB + step * i, sMinYBB + step * j, 0);
+                    Task task = new Task(() => FindPointZ(point, border, triangulation, step));
+                    task.Start();
+                    tasks.Add(task);
+                    points[i, j] = point;
+                }
+            }
+            foreach (Task task in tasks)
+            {
+                task.Wait();
+            }
+            for (int i = 0; i < points.GetLength(0)-1; i++)
+            {
+                for(int j = 0; j <points.GetLength(1)-1; j++)
+                {
+                    if (BMF.Deq(points[i, j].Z, 0) || BMF.Deq(points[i + 1, j].Z, 0) || BMF.Deq(points[i + 1, j + 1].Z, 0) || BMF.Deq(points[i, j + 1].Z, 0)) 
                     {
-                        YCount++;
                         continue;
                     }
 
-                    Parallelogram par = new Parallelogram(nPoint1, nPoint2, nPoint3, nPoint4);
-                    rectanglesArray[XCount, YCount] = par;
+                    Parallelogram par = new Parallelogram(points[i, j], points[i + 1, j], points[i + 1, j + 1], points[i, j + 1]);
+                    rectanglesArray[i, j] = par;
                     rectangles.Add(par);
-                    YCount++;
                 }
-                XCount++;
             }
         }
-
 
 
         public void FindPointZ(Point p, Polygon border, Triangulation triangulation, double step)
@@ -274,14 +113,14 @@ namespace MathModule
                     //{
                     //    if (tr.IsPointInsideTriangle(nPoint1))
                     //    {
-                    Triangle tr = triangulation.FindTriangle_Borders(p);
+                    Triangle tr = triangulation.FindTriangle(p);
                     double[] factors = tr.GetPlanarFactors();
                     p.Z = ((-p.X * factors[0]) + (-p.Y * factors[1]) - factors[3]) / factors[2];
                     //break;
                     //    }
                     //}
                 }
-                else if (outerPolygon.GetDistance2DToPoint(p) < step / 100)
+                else if (outerPolygon.GetDistance2DToPoint(p) < step / 1000)
                 {
                     //foreach (Triangle tr in triangulation.triangles)
                     //{
@@ -305,14 +144,14 @@ namespace MathModule
                     //{
                     //    if (tr.IsPointInsideTriangle(nPoint1))
                     //    {
-                    Triangle tr = triangulation.FindTriangle_Borders(p);
+                    Triangle tr = triangulation.FindTriangle(p);
                     double[] factors = tr.GetPlanarFactors();
                     p.Z = ((-p.X * factors[0]) + (-p.Y * factors[1]) - factors[3]) / factors[2];
                     //break;
                     //    }
                     //}
                 }
-                else if (outerPolygon.GetDistance2DToPoint(p) < step / 100)
+                else if (outerPolygon.GetDistance2DToPoint(p) < step / 1000)
                 {
                     //foreach (Triangle tr in triangulation.triangles)
                     //{
@@ -347,32 +186,6 @@ namespace MathModule
 
         public double[] GetVolume(RegularRectangleNet net)
         {
-            //try
-            //{
-            //    double[] result = new double[3];
-            //    List<Parallelogram> par = new List<Parallelogram>(net.rectangles);
-            //    for (int i = 0; i < this.rectangles.Count; i++)
-            //    {
-            //        for (int j = 0; j < par.Count; j++)
-            //        {
-            //            if (this.rectangles[i].IsEqual2D(par[j]))
-            //            {
-            //                double[] sRes = Volume.RectangleVolumeForRegularModel(this.rectangles[i], par[j]);
-            //                result[0] += sRes[0];
-            //                result[1] += sRes[1];
-            //                result[2] = sRes[1];
-            //                par.Remove(par[j]);
-            //                break;
-            //            }
-            //        }
-            //    }
-            //    return result;
-            //}
-            //catch(Exception e)
-            //{
-            //    MessageBox.Show(e.ToString());
-            //    return null;
-            //}
             double[] result = new double[3];
             double maxX = this.minX + step * this.rectanglesArray.GetLength(0);
             double maxY = this.minY + step * this.rectanglesArray.GetLength(1);
@@ -404,7 +217,8 @@ namespace MathModule
             int y1 = (int)((net.minY - this.minY) / step);
             startX = x1 < 0 ? 0 : x1;
             startY = y1 < 0 ? 0 : y1;
-
+            int i = 1;
+            List<Task<double[]>> tasks = new List<Task<double[]>>();
             if (BMF.Deq(this.step, net.step) && minX < maxX1 && minY < maxY1)
             {
                 for (; startX < endX; startX++)
@@ -413,16 +227,23 @@ namespace MathModule
                     {
                         if (rectanglesArray[startX, y] != null && net.rectanglesArray[startX - x1, y - y1] != null)
                         {
-                            double[] sRes = Volume.RectangleVolumeForRegularModel(rectanglesArray[startX, y], net.rectanglesArray[startX - x1, y - y1]);
-                            result[0] += sRes[0];
-                            result[1] += sRes[1];
-                            result[2] = sRes[1];
+                            int a = startX;
+                            int b = y;
+                            Task <double[]> task = new Task<double[]>(() => Volume.RectangleVolumeForRegularModel(rectanglesArray[a, b], net.rectanglesArray[a - x1, b - y1]));
+                            task.Start();
+                            tasks.Add(task);
                         }
                     }
                 }
             }
+            foreach(Task<double[]> task in tasks)
+            {
+                task.Wait();
+                result[0] += task.Result[0];
+                result[1] += task.Result[1];
+                result[2] += task.Result[1];
+            }
             return result;
-
         }
 
     }

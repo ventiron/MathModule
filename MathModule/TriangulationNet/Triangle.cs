@@ -7,13 +7,13 @@ using System.Windows.Forms;
 
 namespace MathModule
 {
-    public class Triangle : Polygon
+    public class Triangle : MathObject
     {
         public new TriangulationEdge[] edges = new TriangulationEdge[3];
         private Point[] points;
 
         // Конструкторы класса
-        public Triangle(TriangulationEdge edge1, TriangulationEdge edge2, TriangulationEdge edge3) : base(new List<Segment>() { edge1,edge2,edge3})
+        public Triangle(TriangulationEdge edge1, TriangulationEdge edge2, TriangulationEdge edge3)
         {
             if (edge1 == null || edge2 == null || edge3 == null)
             {
@@ -26,7 +26,7 @@ namespace MathModule
             edges[2] = edge3;
             this.InsetrTriangleInEdge(edge3);
         }
-        public Triangle(TriangulationEdge edge1, TriangulationEdge edge2, TriangulationEdge edge3, Triangle tr, bool isOnlyFirstAreOld = false) : base(new List<Segment>() { edge1, edge2, edge3 })
+        public Triangle(TriangulationEdge edge1, TriangulationEdge edge2, TriangulationEdge edge3, Triangle tr, bool isOnlyFirstAreOld = false)
         {
             if (edge1 == null || edge2 == null || edge3 == null)
             {
@@ -51,7 +51,7 @@ namespace MathModule
                 this.InsetrTriangleInEdge(edge3);
             }
         }
-        public Triangle(TriangulationEdge edge1, TriangulationEdge edge2, TriangulationEdge edge3, Triangle tr1, Triangle tr2, bool isFirstFullNew = false) : base(new List<Segment>() { edge1, edge2, edge3 })
+        public Triangle(TriangulationEdge edge1, TriangulationEdge edge2, TriangulationEdge edge3, Triangle tr1, Triangle tr2, bool isFirstFullNew = false)
         {
             if (edge1 == null || edge2 == null || edge3 == null)
             {

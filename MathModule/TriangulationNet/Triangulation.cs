@@ -27,7 +27,7 @@ namespace MathModule
         /// loopCount - переменная - счётчик для нахождения залупливания циклов (на момент написания - цикла поиска треугольника).
         /// precision - переменная используемая для установки границы округления.
         /// </переменные>
-        TriangulationSearchMassive searchArray;
+        TriangulationSearchArray searchArray;
         int loopCount;
 
 
@@ -100,7 +100,7 @@ namespace MathModule
             triangles.Add(new Triangle(edges[0], edges[1], edges[2]));
 
 
-            searchArray = new TriangulationSearchMassive(this);
+            searchArray = new TriangulationSearchArray(this);
             try
             {
                 for (int i = 3; i < points.Count; i++)
@@ -305,7 +305,7 @@ namespace MathModule
                     usedPoints.Add(edge.points[0]);
                     isFirstEdgeNew = false;
                 }
-                // Если певторое из новых рёбер - истинно новое добавить его и точку образующую его в соответствующие массивы.
+                // Если второе из новых рёбер - истинно новое добавить его и точку образующую его в соответствующие массивы.
                 if (isSecondEdgeNew)
                 {
                     newEdges.Add(newEdge2);
@@ -724,12 +724,12 @@ namespace MathModule
                     {
                         Point min = BMF.GetMin(new List<Point>(tr.GetPoints()));
                         Point max = BMF.GetMax(new List<Point> (tr.GetPoints()));
-                        Center.X = Center.X + (max.X - min.X) / 10000;
+                        Center.X = Center.X + (max.X - min.X) / 1000000;
                         pt = edge.GetIntersection2D(interEdge);
                         pInter = tr.GetPointBelongingToSegment(interEdge);
                         if(pt == null)
                         {
-                            Center.Y = Center.Y + (max.Y - min.Y) / 10000;
+                            Center.Y = Center.Y + (max.Y - min.Y) / 1000000;
                             pt = edge.GetIntersection2D(interEdge);
                             pInter = tr.GetPointBelongingToSegment(interEdge);
                         }
@@ -786,7 +786,6 @@ namespace MathModule
             }
             else
             {
-                //tr = planar[Convert.ToInt32(Math.Truncate((point.X - minX) / section)), Convert.ToInt32(Math.Truncate((point.Y - minY) / section))].GetTriangle();
                 tr = searchArray.GetTriangleByPoint(point);
             }
 
@@ -797,40 +796,48 @@ namespace MathModule
             int count = 0;
             while (true)
             {
+                //Проверяем единственный ли треугольник в триангуляции (нужно чтобы обойти проверку на все 3 крайних грани).
                 Center = tr.GetCentroid();
-                foreach (Point p in tr.GetPoints())
+                if (triangles.Count != 1)
                 {
-                    if (p.IsEqual2D(point))
+                    //Проверяем, совпадают ли искомый пункт и вершины треугольника.
+                    foreach (Point p in tr.GetPoints())
                     {
-                        return tr;
-                    }
-                }
-
-
-                foreach (TriangulationEdge edge in tr.edges)
-                {
-                    if (edge.isBorderEdge()) count++;
-                }
-                if (count == 2)
-                {
-                    if (currentEdge != null)
-                    {
-                        foreach (TriangulationEdge edge in tr.edges)
+                        if (p.IsEqual2D(point))
                         {
-                            if (!edge.isBorderEdge())
-                            {
-                                currentEdge = edge;
-                                tr = edge.GetOtherTriangle(tr);
-                            }
+                            return tr;
                         }
-                        continue;
                     }
-                    return FindTriangle_Brute(point);
+
+                    //Считаем количество крайних граней
+                    foreach (TriangulationEdge edge in tr.edges)
+                    {
+                        if (edge.isBorderEdge()) count++;
+                    }
+                    // Если их 2, то устанавливаем текущей двустороннюю грань.
+                    if (count == 2)
+                    {
+                        if (currentEdge != null)
+                        {
+                            foreach (TriangulationEdge edge in tr.edges)
+                            {
+                                if (!edge.isBorderEdge())
+                                {
+                                    currentEdge = edge;
+                                    tr = edge.GetOtherTriangle(tr);
+                                }
+                            }
+                            continue;
+                        }
+                        //Сюда надо как-то добираться, сейчас нигде нельзя поставить currentEdge в null. Исправь
+                        return FindTriangle_Brute(point);
+                    }
+                    else if (count > 2)
+                    {
+                        throw new AggregateException("Обнаружен треугольник вне триангуляции");
+                    }
                 }
-                else if (count > 2)
-                {
-                    throw new AggregateException("Обнаружен треугольник вне триангуляции");
-                }
+                //Поиск полностью повторяет обычный за исключением части с провркой на крайнюю грань.
                 count = 0;
                 foreach (TriangulationEdge edge in tr.edges)
                 {
@@ -845,12 +852,12 @@ namespace MathModule
                     {
                         Point min = BMF.GetMin(new List<Point>(tr.GetPoints()));
                         Point max = BMF.GetMax(new List<Point>(tr.GetPoints()));
-                        Center.X = Center.X + (max.X - min.X) / 10000;
+                        Center.X = Center.X + (max.X - min.X) / 1000000;
                         pt = edge.GetIntersection2D(interEdge);
                         pInter = tr.GetPointBelongingToSegment(interEdge);
                         if (pt == null)
                         {
-                            Center.Y = Center.Y + (max.Y - min.Y) / 10000;
+                            Center.Y = Center.Y + (max.Y - min.Y) / 1000000;
                             pt = edge.GetIntersection2D(interEdge);
                             pInter = tr.GetPointBelongingToSegment(interEdge);
                         }
@@ -1141,6 +1148,7 @@ namespace MathModule
                 Point max = searchArray.GetMax();
 
                 double absoluteHeight = min.Z + (step - (min.Z % step));
+                if (min.Z == 0) absoluteHeight = 0;
                 double currentHeight = absoluteHeight;
                 bool isEdgeOnPlaneHeight = false;
                 while (absoluteHeight < max.Z)
@@ -1163,7 +1171,7 @@ namespace MathModule
                         continue;
                     }
                     CreateBorderIsoline(currentHeight);
-                    //CreateInnerIsoline(currentHeight);
+                    CreateInnerIsoline(currentHeight);
                     absoluteHeight += step;
                     currentHeight = absoluteHeight;
                 }
@@ -1566,11 +1574,12 @@ namespace MathModule
 
 
 
-        private const string saveString1 = "V";
-        private const string saveString2 = "S";
-        private const string saveString3 = "SV";
-        private const string saveString4 = "V0";
-        private const string saveString5 = "V1";
+        public const string saveString1 = "V";
+        public const string saveString2 = "S";
+        public const string saveString3 = "SV";
+        public const string saveString4 = "V0";
+        public const string saveString5 = "V1";
+        public const string saveFileType = ".save";
 
         /// <summary>
         /// Сохраняет триангуляцию в файл по заданному пути. Если файла по пути нет, то он создаётся.
@@ -1731,8 +1740,9 @@ namespace MathModule
         public void Load(string filePath)
         {
             this.clear();
-            //try { 
-            using (StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default))
+            try
+            {
+                using (StreamReader reader = new StreamReader(filePath, System.Text.Encoding.Default))
             {
 
                 Queue<TriangulationEdge> ActiveEdges = new Queue<TriangulationEdge>();
@@ -1862,13 +1872,14 @@ namespace MathModule
                     }
                 }
             }
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show(e.Message);
-            //}
+                this.searchArray = new TriangulationSearchArray(this);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
-        }
+}
         private void clear()
         {
             loopCount = 0;

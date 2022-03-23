@@ -103,138 +103,6 @@ namespace MathModule
         public Point GetIntersection2D(Point pt1, Point pt2, bool CheckForBorderPoints = true)
         {
 
-            //if (pt1 == null || pt2 == null)
-            //{
-            //    return null;
-            //}
-            //// Пункты, чтобы не менять оригиналы.
-            //Point p1 = pt1;
-            //Point p2 = pt2;
-            //Point p3 = this.points[0];
-            //Point p4 = this.points[1];
-            //double A1;
-            //double A2;
-            //double b1;
-            //double b2;
-            //double Xa;
-            //double Ya;
-            //// Переброска точек, чтобы первые были минимальны
-            //if (p1.X > p2.X)
-            //{
-            //    Point temp = p1;
-            //    p1 = p2;
-            //    p2 = temp;
-            //}
-            //if (p3.X > p4.X)
-            //{
-            //    Point temp = p3;
-            //    p3 = p4;
-            //    p4 = temp;
-            //}
-            //// Проверка могут ли отрезки пересекаться в принципе
-            //if (p2.X < p3.X || Math.Max(p1.Y, p2.Y) < Math.Min(p3.Y, p4.Y))
-            //{
-            //    return null;
-            //}
-            //// Проверка, вертикальны ли оба отрезка
-            //if (BMF.Deq(p1.X, p2.X) && BMF.Deq(p3.X, p4.X))
-            //{
-            //    if (p2.X == p4.X)
-            //    {
-            //        if (!((Math.Max(p1.Y, p2.Y) < Math.Min(p3.Y, p4.Y)) || (Math.Min(p1.Y, p2.Y) > Math.Max(p3.Y, p4.Y))))
-            //        {
-            //            return new Point(p1.X, p1.Y, 0);
-            //        }
-            //    }
-            //    return null;
-            //}
-            //// Проверка, вертикален ли первый отрезок
-            //if (BMF.Deq(p1.X, p2.X))
-            //{
-            //    Xa = p1.X;
-            //    A2 = (p3.Y - p4.Y) / (p3.X - p4.X);
-            //    b2 = p3.Y - A2 * p3.X;
-            //    Math.Round(Ya = A2 * Xa + b2, precision);
-
-            //    if (p3.X <= Xa && p4.X >= Xa && Math.Min(p1.Y, p2.Y) <= Ya && Math.Max(p1.Y, p2.Y) >= Ya)
-            //    {
-            //        return new Point(Xa, Ya, 0);
-            //    }
-            //    return null;
-            //}
-            //// Проверка, вертикален ли второй отрезок
-            //if (BMF.Deq(p3.X, p4.X))
-            //{
-            //    Xa = p3.X;
-            //    A1 = (p1.Y - p2.Y) / (p1.X - p2.X);
-            //    b1 = p1.Y - A1 * p1.X;
-            //    Math.Round(Ya = A1 * Xa + b1, precision);
-            //    if (p1.X <= Xa && p2.X >= Xa && Math.Min(p3.Y, p4.Y) <= Ya && Math.Max(p3.Y, p4.Y) >= Ya)
-            //    {
-            //        return new Point(Xa, Ya, 0);
-            //    }
-            //    return null;
-            //}
-            //A1 = (p1.Y - p2.Y) / (p1.X - p2.X);
-            //A2 = (p3.Y - p4.Y) / (p3.X - p4.X);
-            //b1 = p1.Y - A1 * p1.X;
-            //b2 = p3.Y - A2 * p3.X;
-            //// Проверка на параллельность
-            //if (BMF.Deq(A1, A2))
-            //{
-            //    double A3 = (p1.Y - p3.Y) / (p1.X - p3.X);
-            //    if (BMF.Deq(A1, A3))
-            //    {
-            //        return new Point(p3.X, p3.Y, p3.Z);
-            //    }
-            //    return null;
-            //}
-
-            //Xa = Math.Round((b2 - b1) / (A1 - A2), precision);
-            //Ya = Math.Round(A1 * Xa + b1, precision);
-            //if ((Xa < Math.Max(p1.X, p3.X)) || (Xa > Math.Min(p2.X, p4.X)))
-            //{
-            //    return null;
-            //}
-            //if (!CheckForBorderPoints && this.IsEqual2D(new Point(Xa, Ya, 0)))
-            //{
-            //    return null;
-            //}
-
-            //return new Point(Xa, Ya, 0);
-
-
-
-
-
-
-
-
-            Segment seg = new Segment(pt1, pt2);
-            double dist1 = this.GetLengthTo2D(pt1);
-            double dist2 = this.GetLengthTo2D(pt2);
-            double dist3 = seg.GetLengthTo2D(this.points[0]);
-            double dist4 = seg.GetLengthTo2D(this.points[1]);
-            double dist = Math.Min(Math.Min(dist1, dist2), Math.Min(dist3, dist4));
-            if (dist < BMF.epsilon)
-            {
-                if (BMF.Deq(dist1, dist))
-                {
-                    return pt1;
-                }
-                if (BMF.Deq(dist2, dist))
-                {
-                    return pt2;
-                }
-                if (BMF.Deq(dist3, dist))
-                {
-                    return this.points[0];
-                }
-                if (BMF.Deq(dist4, dist))
-                {
-                    return this.points[1];
-                }
-            }
             if (pt1 == null || pt2 == null)
             {
                 return null;
@@ -250,8 +118,6 @@ namespace MathModule
             double b2;
             double Xa;
             double Ya;
-
-
             // Переброска точек, чтобы первые были минимальны
             if (p1.X > p2.X)
             {
@@ -288,7 +154,7 @@ namespace MathModule
                 Xa = p1.X;
                 A2 = (p3.Y - p4.Y) / (p3.X - p4.X);
                 b2 = p3.Y - A2 * p3.X;
-                Ya = A2 * Xa + b2;
+                Math.Round(Ya = A2 * Xa + b2, precision);
 
                 if (p3.X <= Xa && p4.X >= Xa && Math.Min(p1.Y, p2.Y) <= Ya && Math.Max(p1.Y, p2.Y) >= Ya)
                 {
@@ -302,7 +168,7 @@ namespace MathModule
                 Xa = p3.X;
                 A1 = (p1.Y - p2.Y) / (p1.X - p2.X);
                 b1 = p1.Y - A1 * p1.X;
-                Ya = A1 * Xa + b1;
+                Math.Round(Ya = A1 * Xa + b1, precision);
                 if (p1.X <= Xa && p2.X >= Xa && Math.Min(p3.Y, p4.Y) <= Ya && Math.Max(p3.Y, p4.Y) >= Ya)
                 {
                     return new Point(Xa, Ya, 0);
@@ -324,18 +190,152 @@ namespace MathModule
                 return null;
             }
 
-            Xa = (b2 - b1) / (A1 - A2);
-            Ya = A1 * Xa + b1;
+            Xa = Math.Round((b2 - b1) / (A1 - A2), precision);
+            Ya = Math.Round(A1 * Xa + b1, precision);
             if ((Xa < Math.Max(p1.X, p3.X)) || (Xa > Math.Min(p2.X, p4.X)))
             {
                 return null;
             }
-            if (this.IsEqual2D(new Point(Xa, Ya, 0)) && !CheckForBorderPoints)
+            if (!CheckForBorderPoints && this.IsEqual2D(new Point(Xa, Ya, 0)))
             {
                 return null;
             }
 
             return new Point(Xa, Ya, 0);
+
+
+
+
+
+
+
+
+            //Segment seg = new Segment(pt1, pt2);
+            //double dist1 = this.GetLengthTo2D(pt1);
+            //double dist2 = this.GetLengthTo2D(pt2);
+            //double dist3 = seg.GetLengthTo2D(this.points[0]);
+            //double dist4 = seg.GetLengthTo2D(this.points[1]);
+            //double dist = Math.Min(Math.Min(dist1, dist2), Math.Min(dist3, dist4));
+            //if (dist < BMF.epsilon)
+            //{
+            //    if (BMF.Deq(dist1, dist))
+            //    {
+            //        return pt1;
+            //    }
+            //    if (BMF.Deq(dist2, dist))
+            //    {
+            //        return pt2;
+            //    }
+            //    if (BMF.Deq(dist3, dist))
+            //    {
+            //        return this.points[0];
+            //    }
+            //    if (BMF.Deq(dist4, dist))
+            //    {
+            //        return this.points[1];
+            //    }
+            //}
+            //if (pt1 == null || pt2 == null)
+            //{
+            //    return null;
+            //}
+            //// Пункты, чтобы не менять оригиналы.
+            //Point p1 = pt1;
+            //Point p2 = pt2;
+            //Point p3 = this.points[0];
+            //Point p4 = this.points[1];
+            //double A1;
+            //double A2;
+            //double b1;
+            //double b2;
+            //double Xa;
+            //double Ya;
+
+
+            //// Переброска точек, чтобы первые были минимальны
+            //if (p1.X > p2.X)
+            //{
+            //    Point temp = p1;
+            //    p1 = p2;
+            //    p2 = temp;
+            //}
+            //if (p3.X > p4.X)
+            //{
+            //    Point temp = p3;
+            //    p3 = p4;
+            //    p4 = temp;
+            //}
+            //// Проверка могут ли отрезки пересекаться в принципе
+            //if (p2.X < p3.X || Math.Max(p1.Y, p2.Y) < Math.Min(p3.Y, p4.Y))
+            //{
+            //    return null;
+            //}
+            //// Проверка, вертикальны ли оба отрезка
+            //if (BMF.Deq(p1.X, p2.X) && BMF.Deq(p3.X, p4.X))
+            //{
+            //    if (p2.X == p4.X)
+            //    {
+            //        if (!((Math.Max(p1.Y, p2.Y) < Math.Min(p3.Y, p4.Y)) || (Math.Min(p1.Y, p2.Y) > Math.Max(p3.Y, p4.Y))))
+            //        {
+            //            return new Point(p1.X, p1.Y, 0);
+            //        }
+            //    }
+            //    return null;
+            //}
+            //// Проверка, вертикален ли первый отрезок
+            //if (BMF.Deq(p1.X, p2.X))
+            //{
+            //    Xa = p1.X;
+            //    A2 = (p3.Y - p4.Y) / (p3.X - p4.X);
+            //    b2 = p3.Y - A2 * p3.X;
+            //    Ya = A2 * Xa + b2;
+
+            //    if (p3.X <= Xa && p4.X >= Xa && Math.Min(p1.Y, p2.Y) <= Ya && Math.Max(p1.Y, p2.Y) >= Ya)
+            //    {
+            //        return new Point(Xa, Ya, 0);
+            //    }
+            //    return null;
+            //}
+            //// Проверка, вертикален ли второй отрезок
+            //if (BMF.Deq(p3.X, p4.X))
+            //{
+            //    Xa = p3.X;
+            //    A1 = (p1.Y - p2.Y) / (p1.X - p2.X);
+            //    b1 = p1.Y - A1 * p1.X;
+            //    Ya = A1 * Xa + b1;
+            //    if (p1.X <= Xa && p2.X >= Xa && Math.Min(p3.Y, p4.Y) <= Ya && Math.Max(p3.Y, p4.Y) >= Ya)
+            //    {
+            //        return new Point(Xa, Ya, 0);
+            //    }
+            //    return null;
+            //}
+            //A1 = (p1.Y - p2.Y) / (p1.X - p2.X);
+            //A2 = (p3.Y - p4.Y) / (p3.X - p4.X);
+            //b1 = p1.Y - A1 * p1.X;
+            //b2 = p3.Y - A2 * p3.X;
+            //// Проверка на параллельность
+            //if (BMF.Deq(A1, A2))
+            //{
+            //    double A3 = (p1.Y - p3.Y) / (p1.X - p3.X);
+            //    if (BMF.Deq(A1, A3))
+            //    {
+            //        return new Point(p3.X, p3.Y, p3.Z);
+            //    }
+            //    return null;
+            //}
+
+            //Xa = (b2 - b1) / (A1 - A2);
+            //Ya = A1 * Xa + b1;
+            //if ((Xa < Math.Max(p1.X, p3.X)) || (Xa > Math.Min(p2.X, p4.X)))
+            //{
+            //    return null;
+            //}
+            //if (this.IsEqual2D(new Point(Xa, Ya, 0)) && !CheckForBorderPoints)
+            //{
+            //    return null;
+            //}
+
+            //return new Point(Xa, Ya, 0);
         }
         public Point GetIntersection2D(Segment edge, bool CheckForBorderPoints = true)
         {

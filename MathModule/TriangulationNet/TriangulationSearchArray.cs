@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathModule
 {
-    public class TriangulationSearchMassive
+    public class TriangulationSearchArray
     {
         //LinkCell[,] linkCells;
         Triangle[,] linkCells;
@@ -20,7 +20,7 @@ namespace MathModule
         private Point max;
 
         int codk;
-        public TriangulationSearchMassive(Triangulation triangulation)
+        public TriangulationSearchArray(Triangulation triangulation)
         {
             codk = 0;
             planarBorder = 1;
